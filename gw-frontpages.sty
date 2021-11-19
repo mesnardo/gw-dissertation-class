@@ -1,0 +1,309 @@
+%% =================================================================================================
+%%
+%% pacakge: gw-frontpages
+%%
+%% This package is used by document class gw-dissertation and is not supposed to be used standalone. 
+%%
+%% =================================================================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gw-dissertation-class/gw-frontpages}[2021/11/19]
+
+% packages
+% =================================================================================================
+
+% geometry sets up the layout/dimensions of the pages
+\RequirePackage{geometry}
+
+% etoolbox provides some commands for defining robust macros
+\RequirePackage{etoolbox}
+
+% arrayjob provides arrays for holding information of committee members
+\RequirePackage{arrayjob}
+
+% setspace provides commands to easily change the spacing. Default to double spacing
+\RequirePackage{setspace}
+
+% enumitem gives fine control over itemize list/description
+\RequirePackage{enumitem}
+
+% pgffor provides for loops
+\RequirePackage{multido}
+
+% options
+% =================================================================================================
+
+% whether to show the dedication page; default is false
+\newif\if@showdedication
+\@showdedicationfalse
+
+% whether to show the acknowledgment page; default is false
+\newif\if@showacknowledgment
+\@showacknowledgmentfalse
+
+% whether to show the disclaimer page; default is false
+\newif\if@showdisclaimer
+\@showdisclaimerfalse
+
+% macros
+% =================================================================================================
+
+% dissertation title
+\renewrobustcmd*{\@title}{\{Dissertation Title\}}
+\renewrobustcmd*{\title}[1]{\renewrobustcmd*{\@title}{{#1}}}
+
+% author's name
+\renewrobustcmd*{\@author}{\{Author\}}
+\renewrobustcmd*{\author}[1]{\renewrobustcmd*{\@author}{{#1}}}
+
+% defense date
+\newrobustcmd*{\@defdate}{\{Defense date\}}
+\newrobustcmd*{\defdate}[1]{\renewrobustcmd*{\@defdate}{{#1}}}
+
+% degree conferral (graduation) month, day, and year
+\newrobustcmd*{\@gradyear}{\{Graduation year\}}
+\newrobustcmd*{\gradyear}[1]{\renewrobustcmd*{\@gradyear}{{#1}}}
+\newrobustcmd*{\@gradmonth}{\{Graduation month\}}
+\newrobustcmd*{\gradmonth}[1]{\renewrobustcmd*{\@gradmonth}{{#1}}}
+\newrobustcmd*{\@graddate}{\{Graduation date\}}
+\newrobustcmd*{\graddate}[1]{\renewrobustcmd*{\@graddate}{{#1}}}
+
+% advisor's name and title
+\newrobustcmd*{\@advisor}{\{Advisor's Name\}\\\{Advisor's title\}}
+\newrobustcmd*{\advisor}[2]{\renewrobustcmd*{\@advisor}{{#1}\\{#2}}}
+
+% the school's name at GW
+\newrobustcmd*{\@school}{\{Name of your school\}}
+\newrobustcmd*{\school}[1]{\renewrobustcmd*{\@school}{{#1}}}
+
+% dedication text (note we don't need an asterisk because it accepts multi-paragraph content)
+\newrobustcmd{\@dedication}{\{Dedication body\}}
+\newrobustcmd{\dedication}[1]{\renewrobustcmd{\@dedication}{{#1}}\@showdedicationtrue}
+
+% acknowledgment text (note we don't need an asterisk because it accepts multi-paragraph content)
+\newrobustcmd{\@acknowledgment}{\{Acknowledgment body\}}
+\newrobustcmd{\acknowledgment}[1]{\renewrobustcmd{\@acknowledgment}{{#1}}\@showacknowledgmenttrue}
+
+% disclaimer text (note we don't need an asterisk because it accepts multi-paragraph content)
+\newrobustcmd{\@disclaimer}{\{Disclaimer body\}}
+\newrobustcmd{\disclaimer}[1]{\renewrobustcmd{\@disclaimer}{{#1}}\@showdisclaimertrue}
+
+% abstract text (note we don't need an asterisk because it accepts multi-paragraph content)
+\newrobustcmd{\@abstract}{\{Abstract body\}}
+\renewrobustcmd{\abstract}[1]{\renewrobustcmd{\@abstract}{{#1}}}
+
+% the author's previous degrees
+\newarray\prevdegrees
+\prevdegrees(1)={Insert at least a bachelor's degree}
+
+% committee members
+\newarray\committee
+\committee(1)={Insert at least one committee member}
+
+% a variable to save users' previous indent length
+\newlength\@oldindent
+
+% custom title page
+\renewrobustcmd*{\titlepage}{%
+    % temporarily change the layout: title starts from 2in below the paper edge
+    \newgeometry{top=2in, bottom=1in, left=1.25in, right=1.25in}%
+    % the title page is counted as page i (in roman numeral system)
+    \pagenumbering{roman}%
+    % but GW doesn't want this page number to show in this title page
+    \thispagestyle{empty}%
+    % all things on this page are center-aligned
+    \begin{singlespace}%
+        \begin{center}%
+            % title: boldface, 12pt, followed by a 3-line space
+            {\normalsize\textbf{\@title}}\\*[3\baselineskip]%
+            % author: 12pt, follow by a 3-line space
+            by \@author\\*[3\baselineskip]%
+            % loop over previous degrees
+            \multido{\i=1+1}{10}{%
+                \checkprevdegrees(\i)%
+                \ifemptydata%
+                    \multidostop%
+                \else%
+                    \cachedata\\%
+                \fi%
+            }
+            % add a 2-line space after all previous degrees
+            \vspace{2\baselineskip}%
+            % submission info header: 12pt followed by 3-line space
+            A Dissertation submitted to:\\*[3\baselineskip]%
+            % submission info (line breaks are hard-coded): followed by 3-line space
+            The Faculty of\\%
+            The \@school~\\%
+            of The George Washington University\\%
+            in partial satisfaction of the requirements\\%
+            for the degree of Doctor of Philosophy\\*[3\baselineskip]%
+            % degree conferral date: 12pt followed by 3-line space
+            \@gradmonth, \@graddate, \@gradyear\\*[3\baselineskip]%
+            % advisor: 12pt followed by 3-line space
+            Dissertation directed by\\*[\baselineskip]%
+            \@advisor\\%
+        \end{center}%
+    \end{singlespace}%
+    % restore to default page layout
+    \restoregeometry%
+}
+
+% certification page
+\newrobustcmd*{\certpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    \begin{doublespace}
+        % required text
+        \noindent%
+        The \@school~of The George Washington %
+        University certifies that \@author~has passed the Final %
+        Examination for the degree of Doctor of Philosophy as of \@defdate. %
+        This is the final and approved form of the dissertation.
+    \end{doublespace}
+    \begin{singlespace}%
+        \vspace*{3\baselineskip}%
+        % title and author
+        \begin{center}%
+            \textbf{\@title}\\[3\baselineskip]%
+            \@author\\[3\baselineskip]%
+        \end{center}%
+        % committee members
+        Dissertation Research Committee:\\%
+        \begin{itemize}[leftmargin=0.5in, topsep=0pt]%
+            \multido{\i=1+1}{10}{%
+                \checkcommittee(\i)%
+                \ifemptydata\multidostop\else\item[]\cachedata\fi%
+            }%
+        \end{itemize}%
+    \end{singlespace}
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% copyright page
+\newrobustcmd*{\copyrightpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    \begin{singlespace}
+        % let latex automatically determine how much vertical space it needs
+        \vspace*{\fill}%
+        % copyright text
+        \begin{center}%
+            © Copyright \@gradyear~by \@author\\%
+            All rights reserved%
+        \end{center}%
+        % let latex automatically determine how much vertical space it needs
+        \vspace*{\fill}%
+    \end{singlespace}
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% dedication
+\newrobustcmd*{\dedicationpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    % copy the old indent setting
+    \setlength{\@oldindent}{\parindent}%
+    % enforce the indent length
+    \setlength{\parindent}{0in}%
+    % title of this specific page
+    \begin{singlespace}%
+        \begin{center}\textbf{Dedication}\\[2\baselineskip]\end{center}%
+    \end{singlespace}%
+    % content body
+    \begin{doublespace}%
+        \@dedication%
+    \end{doublespace}%
+    % restore to the old indent
+    \setlength{\parindent}{\@oldindent}%
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% acknowledgment
+\newrobustcmd*{\acknowledgmentpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    % copy the old indent setting
+    \setlength{\@oldindent}{\parindent}%
+    % enforce the indent length
+    \setlength{\parindent}{0.5in}%
+    % title of this specific page
+    \begin{singlespace}%
+        \begin{center}\textbf{Acknowledgment}\\[2\baselineskip]\end{center}%
+    \end{singlespace}%
+    % content body
+    \begin{doublespace}%
+        \@acknowledgment%
+    \end{doublespace}%
+    % restore to the old indent
+    \setlength{\parindent}{\@oldindent}%
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% dedication
+\newrobustcmd*{\disclaimerpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    % copy the old indent setting
+    \setlength{\@oldindent}{\parindent}%
+    % enforce the indent length
+    \setlength{\parindent}{0in}%
+    % title of this specific page
+    \begin{center}\textbf{Disclaimer}\\[2\baselineskip]\end{center}%
+    \@disclaimer%
+    % restore to the old indent
+    \setlength{\parindent}{\@oldindent}%
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% abstract
+\newrobustcmd*{\abstractpage}{%
+    % force the layout, so users' original layouts don't matter
+    \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
+    % force to start a new page
+    \newpage%
+    % headers
+    \begin{singlespace}
+        \begin{center}
+            \textbf{Abstract of Dissertation}\\[2\baselineskip]
+            \textbf{\@title}\\[2\baselineskip]  % GW says using normal font, but SEAS says boldface
+        \end{center}
+    \end{singlespace}
+    % copy the old indent setting
+    \setlength{\@oldindent}{\parindent}%
+    % enforce the indent length
+    \setlength{\parindent}{0.5in}%
+    % content body
+    \begin{doublespace}
+        \@abstract
+    \end{doublespace}
+    % restore to the old indent
+    \setlength{\parindent}{\@oldindent}%
+    % restore to users' original page layout
+    \restoregeometry%
+}
+
+% show frontpages
+\newrobustcmd*{\frontpages}{%
+    \titlepage%
+    \certpage%
+    \copyrightpage%
+    \if@showdedication\dedicationpage\fi%
+    \if@showacknowledgment\acknowledgmentpage\fi%
+    \if@showdisclaimer\disclaimerpage\fi%
+    \abstractpage%
+}
