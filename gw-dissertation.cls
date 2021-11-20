@@ -65,6 +65,9 @@
 % enumitem gives fine control over itemize list/description
 \RequirePackage{enumitem}
 
+% hyperref helps in creating internal/external hyperlinks
+\RequirePackage{hyperref}
+
 % GW's front pages
 \RequirePackage{gw-dissertation-class/gw-frontpages}
 
@@ -78,10 +81,6 @@
 \geometry{left=1.25in}
 \geometry{right=1.25in}
 \geometry{footskip=0.25in}  % guideline is not clear it's 0.5in or 0.75in from the bottom
-
-\ifdef{\@debug}{%
-    \geometry{showframe}%
-}{}
 
 % default line spacing
 \doublespacing
@@ -114,6 +113,13 @@
 \unimathsetup{partial=upright}
 \unimathsetup{warnings-off={mathtools-colon, mathtools-overbracket}}
 \setmathfont{latinmodern-math.otf}
+
+% extra settings for debug mode
+\ifdef{\@debug}{%
+    \geometry{showframe}%
+}{%
+    \hypersetup{hidelinks}%
+}
 
 % showing options
 % -----------------------------------------------------------------------------

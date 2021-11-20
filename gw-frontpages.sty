@@ -30,6 +30,12 @@
 % pgffor provides for loops
 \RequirePackage{multido}
 
+% tocloft configures and controls the table of contents
+\RequirePackage{tocloft}
+
+% hyperref in this package mainly line table of content entries to the corresponding pages
+\RequirePackage{hyperref}
+
 % options
 % =================================================================================================
 
@@ -37,9 +43,9 @@
 \newif\if@showdedication
 \@showdedicationfalse
 
-% whether to show the acknowledgment page; default is false
-\newif\if@showacknowledgment
-\@showacknowledgmentfalse
+% whether to show the acknowledgments page; default is false
+\newif\if@showacknowledgments
+\@showacknowledgmentsfalse
 
 % whether to show the disclaimer page; default is false
 \newif\if@showdisclaimer
@@ -80,9 +86,9 @@
 \newrobustcmd{\@dedication}{\{Dedication body\}}
 \newrobustcmd{\dedication}[1]{\renewrobustcmd{\@dedication}{{#1}}\@showdedicationtrue}
 
-% acknowledgment text (note we don't need an asterisk because it accepts multi-paragraph content)
-\newrobustcmd{\@acknowledgment}{\{Acknowledgment body\}}
-\newrobustcmd{\acknowledgment}[1]{\renewrobustcmd{\@acknowledgment}{{#1}}\@showacknowledgmenttrue}
+% acknowledgments text (note we don't need an asterisk because it accepts multi-paragraph content)
+\newrobustcmd{\@acknowledgments}{\{Acknowledgment body\}}
+\newrobustcmd{\acknowledgments}[1]{\renewrobustcmd{\@acknowledgments}{{#1}}\@showacknowledgmentstrue}
 
 % disclaimer text (note we don't need an asterisk because it accepts multi-paragraph content)
 \newrobustcmd{\@disclaimer}{\{Disclaimer body\}}
@@ -103,6 +109,9 @@
 % a variable to save users' previous indent length
 \newlength\@oldindent
 
+% special pages
+% =================================================================================================
+
 % custom title page
 \renewrobustcmd*{\titlepage}{%
     % temporarily change the layout: title starts from 2in below the paper edge
@@ -111,6 +120,10 @@
     \pagenumbering{roman}%
     % but GW doesn't want this page number to show in this title page
     \thispagestyle{empty}%
+    % add a bookmark manually so hyperref knows what page this is
+    \phantomsection%
+    % add this page's book mark to PDF's data so PDF viewers know where this page is
+    \pdfbookmark[0]{Title Page}{\thepage}%
     % all things on this page are center-aligned
     \begin{singlespace}%
         \begin{center}%
@@ -152,8 +165,10 @@
 \newrobustcmd*{\certpage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add a bookmark manually so hyperref knows what page this is
+    \phantomsection%
+    % add this page's book mark to PDF's data so PDF viewers know where this page is
+    \pdfbookmark[0]{Certification}{\thepage}%
     \begin{doublespace}
         % required text
         \noindent%
@@ -186,8 +201,10 @@
 \newrobustcmd*{\copyrightpage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add a bookmark manually so hyperref knows what page this is
+    \phantomsection%
+    % add this page's book mark to PDF's data so PDF viewers know where this page is
+    \pdfbookmark[0]{Copyright}{\thepage}%
     \begin{singlespace}
         % let latex automatically determine how much vertical space it needs
         \vspace*{\fill}%
@@ -207,8 +224,8 @@
 \newrobustcmd*{\dedicationpage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add to the table of contents
+    \phantomsection\addcontentsline{toc}{chapter}{Dedication}%
     % copy the old indent setting
     \setlength{\@oldindent}{\parindent}%
     % enforce the indent length
@@ -227,23 +244,23 @@
     \restoregeometry%
 }
 
-% acknowledgment
-\newrobustcmd*{\acknowledgmentpage}{%
+% acknowledgments
+\newrobustcmd*{\acknowledgmentspage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add to the table of contents
+    \phantomsection\addcontentsline{toc}{chapter}{Acknowledgments}%
     % copy the old indent setting
     \setlength{\@oldindent}{\parindent}%
     % enforce the indent length
     \setlength{\parindent}{0.5in}%
     % title of this specific page
     \begin{singlespace}%
-        \begin{center}\textbf{Acknowledgment}\\[2\baselineskip]\end{center}%
+        \begin{center}\textbf{Acknowledgments}\\[2\baselineskip]\end{center}%
     \end{singlespace}%
     % content body
     \begin{doublespace}%
-        \@acknowledgment%
+        \@acknowledgments%
     \end{doublespace}%
     % restore to the old indent
     \setlength{\parindent}{\@oldindent}%
@@ -255,8 +272,8 @@
 \newrobustcmd*{\disclaimerpage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add to the table of contents
+    \phantomsection\addcontentsline{toc}{chapter}{Disclaimer}%
     % copy the old indent setting
     \setlength{\@oldindent}{\parindent}%
     % enforce the indent length
@@ -274,8 +291,8 @@
 \newrobustcmd*{\abstractpage}{%
     % force the layout, so users' original layouts don't matter
     \newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}%
-    % force to start a new page
-    \newpage%
+    % add to the table of contents
+    \phantomsection\addcontentsline{toc}{chapter}{Abstract of Dissertation}%
     % headers
     \begin{singlespace}
         \begin{center}
@@ -297,13 +314,42 @@
     \restoregeometry%
 }
 
-% show frontpages
+% table of content configuration
+% =================================================================================================
+\renewcommand*\contentsname{Table of Contents}
+\setlength{\cftbeforechapskip}{0\baselineskip}
+\setlength{\cftbeforesecskip}{0\baselineskip}
+\setlength{\cftbeforesubsecskip}{0\baselineskip}
+\setlength{\cftbeforesubsubsecskip}{0\baselineskip}
+\setlength{\cftbeforeparaskip}{0\baselineskip}
+\setlength{\cftbeforefigskip}{0\baselineskip}
+\setlength{\cftbeforetabskip}{0\baselineskip}
+
+% customize the command by tocloft for generating toc title
+\renewcommand{\@cftmaketoctitle}{%
+    \addpenalty\@secpenalty%
+    % add a bookmark manually for the table of contents so hyperref knows what page toc is on
+    \phantomsection%
+    % add this page's book mark to PDF's data so PDF viewers know where toc is
+    \pdfbookmark[0]{\contentsname}{\thepage}%
+    \@cftpagestyle%
+    {%
+        \interlinepenalty\@M%
+        \begin{center}{\normalsize\bfseries\contentsname}\end{center}%
+        \cftmarktoc%
+        \@afterheading%
+    }%
+}
+
+% end-user command to show frontpages
+% =================================================================================================
 \newrobustcmd*{\frontpages}{%
     \titlepage%
     \certpage%
     \copyrightpage%
     \if@showdedication\dedicationpage\fi%
-    \if@showacknowledgment\acknowledgmentpage\fi%
+    \if@showacknowledgments\acknowledgmentspage\fi%
     \if@showdisclaimer\disclaimerpage\fi%
     \abstractpage%
+    \tableofcontents%
 }
