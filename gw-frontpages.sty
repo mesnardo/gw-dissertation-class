@@ -18,8 +18,8 @@
 % etoolbox provides some commands for defining robust macros
 \RequirePackage{etoolbox}
 
-% arrayjob provides arrays for holding information of committee members
-\RequirePackage{arrayjob}
+% arrayjobx provides arrays for holding information of committee members
+\RequirePackage{arrayjobx}
 
 % setspace provides commands to easily change the spacing. Default to double spacing
 \RequirePackage{setspace}
@@ -316,12 +316,16 @@
 
 % table of content configuration
 % =================================================================================================
-\renewcommand*\contentsname{Table of Contents}
+\renewcommand*\contentsname{Table of Contents}  % can't be a robust command
+
+% vertical spacing before entries (spec not found in any GW formatting guideline)
+\setlength{\cftbeforepartskip}{0\baselineskip}
 \setlength{\cftbeforechapskip}{0\baselineskip}
 \setlength{\cftbeforesecskip}{0\baselineskip}
 \setlength{\cftbeforesubsecskip}{0\baselineskip}
 \setlength{\cftbeforesubsubsecskip}{0\baselineskip}
 \setlength{\cftbeforeparaskip}{0\baselineskip}
+\setlength{\cftbeforesubparaskip}{0\baselineskip}
 \setlength{\cftbeforefigskip}{0\baselineskip}
 \setlength{\cftbeforetabskip}{0\baselineskip}
 
@@ -352,4 +356,27 @@
     \if@showdisclaimer\disclaimerpage\fi%
     \abstractpage%
     \tableofcontents%
+}
+
+% custom appendix in the table of content and in the content
+% -----------------------------------------------------------------------------
+\renewcommand*{\appendix}{%
+    % write `\renewrobustcmd*{\cftchapnumwidth}{0.96in}` to the *.toc file
+    \addtocontents{toc}{%
+        \protect\renewrobustcmd*{\protect\cftchapnumwidth}{1.04in}%
+    }%
+    % write `\renewrobustcmd*{\cftchappresnum}{Appendix }` to the *.toc file
+    \addtocontents{toc}{%
+        \protect\renewrobustcmd*{\protect\cftchappresnum}{Appendix }%
+    }%
+    % write `\renewrobustcmd*{\cftpartpresnum}{}` to the *.toc file
+    \addtocontents{toc}{%
+        \protect\renewrobustcmd*{\protect\cftpartpresnum}{}%
+    }%
+    \phantomsection  % add a virtual section so we can get a bookmark anchor
+    \addcontentsline{toc}{part}{Appendices}  % add `Appendices` as a part in ToC
+    \stepcounter{part}  % advance the part counter because `Appendices` serves as a Part
+    \renewcommand\chaptername{Appendix}  % change the chapter prefix from Chapter to Appendix
+    \setcounter{chapter}{0}  % reset chapter counter because now the chapters represent appendices
+    \renewcommand{\thechapter}{\Alph{chapter}}  % display the chapter count with uppercase letters
 }

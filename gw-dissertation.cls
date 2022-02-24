@@ -8,7 +8,7 @@
 \DeclareOption{debug}{\newcommand*{\@debug}{}}
 
 % all other options are passed to LaTeX's report class
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}
 
 % process the options passed into this class
 \ProcessOptions
@@ -16,15 +16,15 @@
 % base class
 % -----------------------------------------------------------------------------
 
-% this template is modified from the native report class
+% this template is modified from the native report class w/ default fontsize 12pt
 \LoadClass[12pt]{report}
 
 % required packages
 % -----------------------------------------------------------------------------
 
-% to check the compiler. We need XeTeX
+% iftex checks the compiler
 \RequirePackage{iftex}
-\RequireXeTeX  % will stop compiling if not using xetex/xelatex
+\RequireXeTeX  % will stop compiling if not using xetex/xelatex (We need XeTeX)
 
 % geometry sets up the layout/dimensions of the pages
 \RequirePackage{geometry}
@@ -45,17 +45,17 @@
 
 % fontspec allows us to select modern TTF based font types. Note, this package
 % requires XeLaTeX or LuaLaTeX. Math fonts are excluded so we can tune the fonts
-% in equations using other packages.
+% in math equations using other packages.
 \RequirePackage[no-math]{fontspec}
 
-% unicode-math allows us to use unicode for math symbols.
+% unicode-math allows us to use unicode for math symbols and ISO math standard.
 \RequirePackage{unicode-math}
 
 % biblatex is a modern alternative to bibtex for processing bibliography 
 \RequirePackage{biblatex}
 
-% graphicx extend the interface for including graphisc. It provides commands
-% including \graphicspath and \DeclareGraphicsExtensions
+% graphicx extends the interface for figures. It provides commands such
+% as \graphicspath and \DeclareGraphicsExtensions
 \RequirePackage{graphicx}
 
 % setspace provides commands to easily change the spacing. Default to double
@@ -80,12 +80,13 @@
 \geometry{bottom=1in}
 \geometry{left=1.25in}
 \geometry{right=1.25in}
-\geometry{footskip=0.25in}  % guideline is not clear it's 0.5in or 0.75in from the bottom
+\geometry{footskip=0.25in}  % guideline isn't clear it's 0.5 or 0.75in from bottom
 
 % default line spacing
 \doublespacing
 
-% default paragraph spacing (extra 0.4 lines on top of double-line spacing); not regularized by GW
+% paragraph spacing (extra 0.4 lines on top of double-line spacing);
+% Note: paragraph spacing not mentioned in GW guideline.
 \setlength{\parskip}{0.4\baselineskip}
 
 % header and footer style
@@ -93,14 +94,17 @@
 \fancyhf{}  % clear default LaTeX's plain style
 \fancyfoot[C]{\thepage}  % position the page number at the bottom center
 \renewcommand{\headrulewidth}{0pt}  % make header separation line invisible
-\renewcommand{\footrulewidth}{0pt}  % make header separation line invisible
+\renewcommand{\footrulewidth}{0pt}  % make footer separation line invisible
 
 % indentation
 \setlength{\parindent}{0.5in}
 
 % font type configurations
 % -----------------------------------------------------------------------------
-\setmainfont{Times New Roman}  % default font (serif family)
+\setmainfont{Times New Roman}  % default serif: Microdoft's Times New Roman
+%\setmainfont{P052}  % alternatively, URW's P052 font
+%\setmainfont{TeX Gyre Pagella}  % or, Pagella in TeX Gyre font set
+%\setmainfont{Palatino Linotype}  % or, Palatino (probably not open-source nor free)
 \setsansfont{Arial}  % Sans Serif family
 \setmonofont{DejaVu Sans Mono}  % monospace (typewritter) family
 
@@ -112,29 +116,33 @@
 \unimathsetup{nabla=upright}
 \unimathsetup{partial=upright}
 \unimathsetup{warnings-off={mathtools-colon, mathtools-overbracket}}
-\setmathfont{latinmodern-math.otf}
+\setmathfont{texgyrepagella-math.otf}
 
 % extra settings for debug mode
+% -----------------------------------------------------------------------------
 \ifdef{\@debug}{%
     \geometry{showframe}%
 }{%
     \hypersetup{hidelinks}%
 }
 
-% showing options
+% hyperlinks of PDF bookmarks. By default, hyperlinks are set to be the
+% displayed counters of parts, chapters, etc. When we reset the displayed
+% counters, it makes different chapters, for example, share the same hyperlinks
+% (because both have the same displayed counter value). We need to make them
+% independent to displayed counters because we will reset displayed chapter
+% counter for appendices. Only parts and chapters have to be handled because
+% section, subsection, etc., by default, are prefixed with chapters' hyperlink
+% names, meaning as long as chapters' hyperlinks are unique, their hyperlinks
+% are also unique.
 % -----------------------------------------------------------------------------
+\renewcommand{\theHpart}{HPART\thepage}
+\renewcommand{\theHchapter}{HCHAP\thepage}
 
-% macros
-% -----------------------------------------------------------------------------
-
-% front matter pages
-% -----------------------------------------------------------------------------
-
-%% thing automatically added after `\begin{document}`
+%% things to be automatically added after `\begin{document}`
 % -----------------------------------------------------------------------------
 \AtBeginDocument{%
     \frontpages
     \newpage%
-    % restart page counter using arabic numerals
-    \pagenumbering{arabic}%
+    \pagenumbering{arabic}  % restart page counter using arabic numerals
 }
