@@ -33,10 +33,13 @@
 % tocloft configures and controls the table of contents
 \RequirePackage{tocloft}
 
-% hyperref in this package mainly line table of content entries to the corresponding pages
+% xcolor provides convenient ways to use colors
+\RequirePackage[dvipsnames]{xcolor}  % must before hyperref
+
+% hyperref in this package mainly links table of content entries to the corresponding pages
 \RequirePackage{hyperref}
 
-% options
+% internal options
 % =================================================================================================
 
 % whether to show the dedication page; default is false
@@ -50,6 +53,25 @@
 % whether to show the disclaimer page; default is false
 \newif\if@showdisclaimer
 \@showdisclaimerfalse
+
+% whether to show the list of figures (lof); default is true
+\newif\if@showlof
+\@showloftrue
+
+% whether to show the list of tables (lot); default is true
+\newif\if@showlot
+\@showlottrue
+
+% public commands
+% =================================================================================================
+
+% controls the presence of list of figures
+\newrobustcmd*{\enablelof}{\@showloftrue}
+\newrobustcmd*{\disablelof}{\@showloffalse}
+
+% controls the presence of list of tables
+\newrobustcmd*{\enablelot}{\@showlottrue}
+\newrobustcmd*{\disablelot}{\@showlotfalse}
 
 % macros
 % =================================================================================================
@@ -314,9 +336,35 @@
     \restoregeometry%
 }
 
-% table of content configuration
+% configurations for table of content (ToC), list of figures (LoF), and list of tables (LoT)
 % =================================================================================================
-\renewcommand*\contentsname{Table of Contents}  % can't be a robust command
+
+% cheat on tocloft package so that we have more explicit controls over the format
+\@cfthaschapterfalse
+
+% a macro to return a string that will be added to ToC and the PDF's bookmarks
+\newrobustcmd*{\@anchoredtitle}[1]{\phantomsection\addcontentsline{toc}{chapter}{#1}#1}%
+
+% the title of ToC
+\renewrobustcmd*{\contentsname}{\@anchoredtitle{Table of Contents}}
+\renewrobustcmd*{\cfttoctitlefont}{\hfill\normalsize\bfseries}
+\renewrobustcmd*{\cftaftertoctitle}{\hfill}
+\setlength{\cftbeforetoctitleskip}{0\baselineskip}
+\setlength{\cftaftertoctitleskip}{0\baselineskip}
+
+% the title of LoF
+\renewrobustcmd*{\listfigurename}{\@anchoredtitle{List of Figures}}
+\renewrobustcmd*{\cftloftitlefont}{\hfill\normalsize\bfseries}
+\renewrobustcmd*{\cftafterloftitle}{\hfill}
+\setlength{\cftbeforeloftitleskip}{0\baselineskip}
+\setlength{\cftafterloftitleskip}{0\baselineskip}
+
+% the title of LoT
+\renewrobustcmd*{\listtablename}{\@anchoredtitle{List of Tables}}
+\renewrobustcmd*{\cftlottitlefont}{\hfill\normalsize\bfseries}
+\renewrobustcmd*{\cftafterlottitle}{\hfill}
+\setlength{\cftbeforelottitleskip}{0\baselineskip}
+\setlength{\cftafterlottitleskip}{0\baselineskip}
 
 % vertical spacing before entries (spec not found in any GW formatting guideline)
 \setlength{\cftbeforepartskip}{0\baselineskip}
@@ -329,23 +377,43 @@
 \setlength{\cftbeforefigskip}{0\baselineskip}
 \setlength{\cftbeforetabskip}{0\baselineskip}
 
-% customize the command by tocloft for generating toc title
-\renewcommand{\@cftmaketoctitle}{%
-    \addpenalty\@secpenalty%
-    % add a bookmark manually for the table of contents so hyperref knows what page toc is on
-    \phantomsection%
-    % add this page's book mark to PDF's data so PDF viewers know where toc is
-    \pdfbookmark[0]{\contentsname}{\thepage}%
-    \@cftpagestyle%
-    {%
-        \interlinepenalty\@M%
-        \begin{center}{\normalsize\bfseries\contentsname}\end{center}%
-        \cftmarktoc%
-        \@afterheading%
-    }%
-}
+% indent of each entries (spec not found in any GW formatting guideline)
+\setlength{\cftpartindent}{0in}
+\setlength{\cftchapindent}{0in}
+\setlength{\cftsecindent}{0.1in}
+\setlength{\cftsubsecindent}{0.2in}
+\setlength{\cftsubsubsecindent}{0.3in}
+\setlength{\cftparaindent}{0.4in}
+\setlength{\cftsubparaindent}{0.5in}
+\setlength{\cftfigindent}{0in}
+\setlength{\cfttabindent}{0in}
 
-% end-user command to show frontpages
+% single spacing inside each entry (happens when a chap/sec/subsec title is too long)
+\let\@old@l@chapter\l@chapter
+\let\@old@l@section\l@section
+\let\@old@l@subsection\l@subsection
+\let\@old@l@subsubsection\l@subsubsection
+\renewrobustcmd*{\l@chapter}[2]{\singlespacing\@old@l@chapter{#1}{#2}\doublespacing}
+\renewrobustcmd*{\l@section}[2]{\singlespacing\@old@l@section{#1}{#2}\doublespacing}
+\renewrobustcmd*{\l@subsection}[2]{\@old@l@subsection{#1}{#2}\doublespacing}
+\renewrobustcmd*{\l@subsubsection}[2]{\singlespacing\@old@l@subsubsection{#1}{#2}\doublespacing}
+
+% dots
+\renewrobustcmd*{\cftdotsep}{1}
+\renewrobustcmd*{\cftchapdotsep}{\cftdotsep}
+
+% prefix: part
+\renewrobustcmd*{\cftpartpresnum}{Part }
+
+% prefix chapter
+\setlength{\cftchapnumwidth}{0.85in}
+\renewrobustcmd*{\cftchappresnum}{Chapter }
+\renewrobustcmd*{\cftchapaftersnum}{:}
+
+% disable the page numbers for parts
+\cftpagenumbersoff{part}
+
+% end-user command to show front pages
 % =================================================================================================
 \newrobustcmd*{\frontpages}{%
     \titlepage%
@@ -356,6 +424,10 @@
     \if@showdisclaimer\disclaimerpage\fi%
     \abstractpage%
     \tableofcontents%
+    \newpage%
+    \if@showlof\listoffigures\fi%
+    \newpage%
+    \if@showlot\listoftables\fi%
 }
 
 % custom appendix in the table of content and in the content
