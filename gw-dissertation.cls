@@ -29,6 +29,8 @@
 % geometry sets up the layout/dimensions of the pages
 \RequirePackage{geometry}
 
+\RequirePackage[document]{ragged2e}
+
 % fancyhdr helps to control layout of the footers and headers
 \RequirePackage{fancyhdr}
 
@@ -54,16 +56,12 @@
 % biblatex is a modern alternative to bibtex for processing bibliography 
 \RequirePackage{biblatex}
 
-% graphicx extends the interface for figures. It provides commands such
-% as \graphicspath and \DeclareGraphicsExtensions
-\RequirePackage{graphicx}
-
 % setspace provides commands to easily change the spacing. Default to double
 % spacing
 \RequirePackage{setspace}
 
-% enumitem gives fine control over itemize list/description
-\RequirePackage{enumitem}
+% xcolor package provides ways to colorize words. Must be imported before hyperref.
+\RequirePackage[dvipsnames]{xcolor}
 
 % hyperref helps in creating internal/external hyperlinks
 \RequirePackage{hyperref}
@@ -101,10 +99,20 @@
 
 % font type configurations
 % -----------------------------------------------------------------------------
-\setmainfont{Times New Roman}  % default serif: Microdoft's Times New Roman
-%\setmainfont{P052}  % alternatively, URW's P052 font
-%\setmainfont{TeX Gyre Pagella}  % or, Pagella in TeX Gyre font set
-%\setmainfont{Palatino Linotype}  % or, Palatino (probably not open-source nor free)
+
+% Times New Roman is the designated font type by GW. However, my adviser prefers Palatino over
+% Times New Roman. Moreover, Palatino doesn't seem to be open-source nor free. So I have no choice
+% and use URW P052 or TeX Gyre Pagella, which are "claimed" to be open-source equivalents of
+% Palatino.
+\setmainfont{P052}  % an open-source equivalent to Palatino
+%\setmainfont{TeX Gyre Pagella}  % an open-source equivalent to Palatino
+%\setmainfont{Palatino Linotype}  % Palatino (probably not open-source nor free)
+%\setmainfont{Palatino}  % Palatino (probably not open-source nor free)
+
+% un-comment to use Times New Roman 
+%\setmainfont{Times New Roman}  % default serif: Microdoft's Times New Roman
+
+% default font types for other font families
 \setsansfont{Arial}  % Sans Serif family
 \setmonofont{DejaVu Sans Mono}  % monospace (typewritter) family
 
