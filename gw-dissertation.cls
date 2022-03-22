@@ -10,7 +10,7 @@
 %% =================================================================================================
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{gw-dissertation}[2021/11/19]
-\RequirePackage{kvoptions}  % allows key-value options for this class
+\RequirePackage{kvoptions}  % processes key-value options for this class
 \RequirePackage{iftex}  % checks the compiler before anything else
 \RequireXeTeX  % will stop compiling if not using xetex/xelatex (WE NEED XETEX)
 
@@ -18,9 +18,10 @@
 % =================================================================================================
 % class options
 % =================================================================================================
-\DeclareOption{debug}{\newcommand*{\@debug}{}}  % enable debug mode
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}  % pass others to native report class
-\ProcessOptions  % process the options passed into this class
+\SetupKeyvalOptions{family=@classopts, prefix=@classopts@}
+\DeclareStringOption[P052]{font}[P052]
+\DeclareBoolOption[false]{debug}
+\ProcessKeyvalOptions{@classopts}
 
 
 % =================================================================================================
@@ -30,7 +31,7 @@
 
 
 % =================================================================================================
-% required packages
+% packages for configuring style
 % =================================================================================================
 \RequirePackage{geometry}  % sets up the layout/dimensions of the pages
 \RequirePackage[document]{ragged2e}  % makes text flushed left and ragged right
@@ -154,14 +155,25 @@
 % indentation
 \setlength{\parindent}{0.5in}
 
-% main font configurations
-\setmainfont{P052}  % an open-source equivalent to Palatino
-%\setmainfont{TeX Gyre Pagella}  % an open-source equivalent to Palatino
-%\setmainfont{Palatino Linotype}  % Palatino (probably not open-source nor free)
-%\setmainfont{Palatino}  % another name for Palatino (probably not open-source nor free)
+% allowed fonts
+\listadd{\@allowedfonts}{P052}
+\listadd{\@allowedfonts}{Pagella}
+\listadd{\@allowedfonts}{Palatino}
+\listadd{\@allowedfonts}{Times}
 
-% Times New Roman  for those really want Times New Roman
-%\setmainfont{Times New Roman}  % default serif: Microdoft's Times New Roman
+% main font configurations
+\xifinlist{\@classopts@font}{\@allowedfonts}{%
+    \expandafter\ifstrequal\expandafter{\@classopts@font}{P052}{\setmainfont{P052}}{}%
+    \expandafter\ifstrequal\expandafter{\@classopts@font}{Pagella}{\setmainfont{Pagella}}{}%
+    \expandafter\ifstrequal\expandafter{\@classopts@font}{Palatino}{\setmainfont{Palatino Linotype}}{}%
+    \expandafter\ifstrequal\expandafter{\@classopts@font}{Times}{\setmainfont{Times New Roman}}{}
+}{% a user provided an unknown font name
+    \ClassError{gw-dissertation}{%
+        Unknown value: \@classopts@font%
+    }{%
+        Option `font` encountered an unknown value \@classopts@font%
+    }%
+}
 
 % default font types for other font families
 \setsansfont{Arial}  % Sans Serif family
@@ -178,16 +190,6 @@
 \unimathsetup{partial=upright}
 \unimathsetup{warnings-off={mathtools-colon, mathtools-overbracket}}
 \setmathfont{texgyrepagella-math.otf}
-
-
-% =================================================================================================
-% extra settings for debug mode
-% =================================================================================================
-\ifdef{\@debug}{%
-    \geometry{showframe}%
-}{%
-    \hypersetup{hidelinks}%
-}
 
 % =================================================================================================
 % hyperlinks of PDF bookmarks. By default, hyperlinks are set to be the
@@ -545,3 +547,13 @@
     \newpage%
     \pagenumbering{arabic}  % restart page counter using arabic numerals
 }
+
+
+% =================================================================================================
+% extra settings for debug mode
+% =================================================================================================
+\if@classopts@debug%
+    \geometry{showframe}%
+\else%
+    \hypersetup{hidelinks}%
+\fi
