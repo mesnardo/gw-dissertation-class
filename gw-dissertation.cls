@@ -548,11 +548,12 @@
     \RequirePackage{tikz}
     \AddToShipoutPictureBG{%
         \begin{tikzpicture}[opacity=0.25]%
-            \filldraw[step=0.2in, line width=0.4pt, BlueGreen] (0pt, 0pt) grid (\paperwidth, \paperheight);%
-            \filldraw[step=1in, line width=0.75pt, BlueGreen] (0pt, 0pt) grid (\paperwidth, \paperheight);%
+            \filldraw[step=0.2in, line width=0.4pt, BlueGreen] %
+                (0pt, 0pt) grid (\paperwidth, \paperheight);%
+            \filldraw[step=1in, line width=0.75pt, BlueGreen] %
+                (0pt, 0pt) grid (\paperwidth, \paperheight);%
         \end{tikzpicture}%
     }%
-    \hypersetup{hidelinks}%
 \else%
     \hypersetup{hidelinks}%
 \fi
