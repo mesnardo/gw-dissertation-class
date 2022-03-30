@@ -1,29 +1,32 @@
 % vim:ft=tex:
 \documentclass[debug, font=Times]{gw-dissertation}[2021/11/19]
+\usepackage{graphicx}
 \usepackage{lipsum}  % to generate random paragraphs
 \usepackage[none]{hyphenat}  % disable hyphenation; not required by GW guideline
 \sloppy  % to make long but non-hyphenated words go to the next line
 
 % configuration for front pages (commands came from gw-dissertation class)
-\title{Example Dissertation}
-\author{First Last}
-\defdate{Spring 2022}
+\title{Dissertation Title in Initial Capitals and Small Letters}
+\author{Your Name}
+\defdate{August 31, 2022}
 \gradyear{2022}
-\gradmonth{05}
+\gradmonth{August}
 \graddate{31}
-\advisor{First Last}{Professor of Sadness Engineering}
-\school{School of Life Destroying}
+\advisor{James W. Smith}{Professor of Finance}
+\school{School of Engineering and Applied Science}
 \dedication{\lipsum[2-3]}
 \acknowledgments{\lipsum[2-3]}
 \disclaimer{\lipsum[2-3]}
 \abstract{\lipsum[2-3]}
 \preface{\lipsum[2-3]}
-\prevdegree{B.A. in Happiness Engineering, May 2006, University of Happy Valley}
-\prevdegree{M.S. in Happiness Engineering, January 2008, University of I don't remember}
-\committee{First1 Last1, Professor of Sadness Engineering, Dissertation Director}
-\committee{First2 Last2, Professor of Sadness Engineering, Committee Member}
-\committee{First3 Last3, Professor of Sadness Engineering, Committee Member}
-\committee{First4 Last4, Professor of Sadness Engineering, Committee Member}
+\prevdegree{B.A. in Accounting, May 2006, University of Maryland}
+\prevdegree{M.S. in Finance, January 2008, University of Maryland}
+\committee{James W. Smith, Professor of Engineering, Dissertation Director}
+\committee{Janet A. Doe, Associate Professor of Computer Science, University of Virginia, Committee Member}
+\committee{Donald B. Green, Research Scientist, National, Committee Member}
+\committee{Joseph Smith, Professor of History and of International Relations, Committee Member}
+\committee{Joseph Smith, Associate Professor of History, University of Delaware, Committee Member}
+\committee{Joseph Smith, Senior Researcher, American Historical Society, Committee Member}
 
 % other configurations
 \addbibresource{reference.bib}  % bib file location
@@ -66,9 +69,9 @@ Start your text and double-space the text.
 \begin{figure}[h!]
     \includegraphics{laminar_turbulent_transition.jpg}
     \caption{%
-        Laminar turbulent transition (public domain figure). I am trying to make the cpation%
-        longer so that we can see how this class handle long captions. I am trying to make the %
-        cpation longer so that we can see how this class handle long captions.%
+        Laminar turbulent transition (public domain figure). I am trying to make the caption %
+        longer so that we can see how this class handles long captions. I am trying to make the %
+        caption longer so that we can see how this class handles long captions.%
     }
 \end{figure}
 
@@ -127,7 +130,9 @@ another fake citation \cite{author2_2000}.
 \appendix
 \chapter{The Heading of Appendix A}
 
-    \section{Appendix Can Have Sections}
+    \section{
+        A very long section title is supposed to be rendered in single-line spacing within the entry
+    }
     Start your text here and double- space the text.
     \begin{figure}[h!]
         \Centering
@@ -142,6 +147,16 @@ another fake citation \cite{author2_2000}.
             \includegraphics[width=0.5\linewidth]{mt_otkliknoy_greben.jpg}
             \caption{Mt. Otkliknoy Greben (public domain figure)}
         \end{figure}
+
+        \nomenclature{$c$}{Speed of light in a vacuum}
+        \nomenclature{$\alpha$}{
+            A very long definition.  A very long definition.  A very long definition.
+            A very long definition.  A very long definition.  A very long definition.
+            A very long definition.  A very long definition.  A very long definition.
+            A very long definition.  A very long definition.  A very long definition.
+            A very long definition.
+        }
+        \nomenclature{$h$}{Planck constant}
 
     \section{Appendix Can Have Sections}
     Start your text here and double- space the text.
