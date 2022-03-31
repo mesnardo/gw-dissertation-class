@@ -75,7 +75,7 @@ or `\show<page name>false` to make the page invisible. The following table shows
 names in the front matter:
 
 | page name | default | note |
-| ---------- | ----------- | --------------- | ------- | ---- |
+| --------- | ------- | ---- |
 | title | on | |
 | certification | on | |
 | copyright | on | |
