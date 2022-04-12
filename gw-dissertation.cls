@@ -147,11 +147,11 @@
 \newarray\@committees
 \@committees(\the@committeecounter)={Insert at least one committee member}
 
-% single-line spacing factor: 0.9875 * 1.208 ~ 1.185 = single-line spacing scale in Microsoft Word
-\newrobustcmd*{\@factor@single}{0.9875}
+% single-line spacing factor: 0.9517 * 1.208 ~ 1.15 = single-line spacing scale in Google Docs
+\newrobustcmd*{\@factor@single}{0.9517241379310345}
 
-% double-line spacing factor: 1.928 * 1.208 ~ 2.33 = double-line spacing scale in Microsoft Word
-\newrobustcmd*{\@factor@double}{1.928}
+% double-line spacing factor: 1.9034 * 1.208 ~ 2.3 = double-line spacing scale in Google Docs
+\newrobustcmd*{\@factor@double}{1.903448275862069}
 
 
 % =================================================================================================
@@ -177,7 +177,7 @@
 \doublespacing
 
 % skips between paragraphs
-\setlength{\parskip}{0pt}
+\setlength{\parskip}{8pt}
 
 % indent (package ragged2e handles indentation after \begin{document})
 \setlength{\RaggedRightParindent}{0.5in}
@@ -195,22 +195,51 @@
 
 % chapter heading format
 \renewcommand{\@makechapterhead}[1]{%
-    \singlespacing%
-    \begin{Center}\textbf{\chaptername\space\thechapter\ --\ #1}\end{Center}\par%
-    \doublespacing%
+    \begin{Center}\textbf{\chaptername\space\thechapter\ --\ #1}\end{Center}\vskip -\parskip%
 }
-
-% chapter(with a star) heading format
-\renewcommand{\@makeschapterhead}[1]{%
-    \singlespacing\begin{Center}\textbf{#1}\end{Center}\par\doublespacing%
-}
+\renewcommand{\@makeschapterhead}[1]{\begin{Center}\textbf{#1}\end{Center}\vskip -\parskip}
 
 % heading formats for others
-\renewcommand{\section}{\@startsection{section}{1}{\z@}{\z@}{1sp}{\singlespacing\bfseries}}
-\renewcommand{\subsection}{\@startsection{subsection}{1}{0.25in}{\z@}{1sp}{\singlespacing\bfseries}}
-\renewcommand{\subsubsection}{\@startsection{subsubsection}{1}{0.5in}{\z@}{1sp}{\singlespacing\bfseries}}
-\renewcommand{\paragraph}{\@startsection{paragraph}{1}{0.75in}{\z@}{1sp}{\singlespacing\bfseries}}
-\renewcommand{\subparagraph}{\@startsection{subparagraph}{1}{1in}{\z@}{1sp}{\singlespacing\bfseries}}
+\renewcommand{\section}[1]{%
+    \vskip -\parskip%
+    \begingroup%
+    \singlespacing%
+    \addvspace{\baselineskip}%
+    \@startsection{section}{1}{\z@}{\z@}{1sp}{\bfseries}[#1]{#1}%
+    \endgroup
+}
+\renewcommand{\subsection}[1]{%
+    \vskip -\parskip%
+    \begingroup%
+    \singlespacing%
+    \addvspace{\baselineskip}%
+    \@startsection{subsection}{2}{0.25in}{\z@}{1sp}{\bfseries}[#1]{#1}%
+    \endgroup
+}
+\renewcommand{\subsubsection}[1]{%
+    \vskip -\parskip%
+    \begingroup%
+    \singlespacing%
+    \addvspace{\baselineskip}%
+    \@startsection{subsubsection}{3}{0.5in}{\z@}{1sp}{\bfseries}[#1]{#1}%
+    \endgroup
+}
+\renewcommand{\paragraph}[1]{%
+    \vskip -\parskip%
+    \begingroup%
+    \singlespacing%
+    \addvspace{\baselineskip}%
+    \@startsection{paragraph}{4}{0.75in}{\z@}{1sp}{\bfseries}[#1]{#1}%
+    \endgroup
+}
+\renewcommand{\subparagraph}[1]{%
+    \vskip -\parskip%
+    \begingroup%
+    \singlespacing%
+    \addvspace{\baselineskip}%
+    \@startsection{subparagraph}{5}{1in}{\z@}{1sp}{\bfseries}[#1]{#1}%
+    \endgroup
+}
 
 % removing extra \addvspace command in LoF and LoT when issuing \chapter
 \patchcmd{\Hy@org@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{}
@@ -267,6 +296,7 @@
     \thispagestyle{empty}  % however, don't actually show the page number at the bottom
     \pdfbookmark[0]{Title Page}{TitlePage}%
     \begingroup%
+    \setlength{\parskip}{0pt}%
     \Centering%
     \singlespacing%
     \textbf{\@title}\\[3\baselineskip]%
@@ -295,6 +325,7 @@
     \newpage%
     \pdfbookmark[0]{Certification}{CertPage}%
     \begingroup%
+    \setlength{\parskip}{0pt}%
     \doublespacing%
     \noindent%
     The \@school~of The George Washington University certifies that \@author~has passed the
@@ -308,8 +339,9 @@
         \textbf{\@title}\\[3\baselineskip]%
         \@author\\[3\baselineskip]%
     \end{center}%
-    Dissertation Research Committee:\\[1\baselineskip]%
-    \begin{itemize}[leftmargin=0.5in, topsep=0pt]%
+    Dissertation Research Committee:\vskip \baselineskip%
+    \begin{itemize}[leftmargin=0.5in, style=multiline, topsep=0pt, partopsep=0pt, itemsep=0pt,%
+            parsep=\baselineskip]%
         \multido{\i=1+1}{10}{
         \check@committees(\i)%
         \ifemptydata\multidostop\else\item[]\cachedata\fi%
