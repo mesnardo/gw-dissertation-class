@@ -40,7 +40,6 @@
 \RequirePackage[T1]{fontenc}  % use 8bit encoded fonts
 \RequirePackage[no-math]{fontspec}  % allows us to use .ttf or .otf fonts
 \RequirePackage{unicode-math}  % allows using unicode for math symbols and ISO math standard
-\RequirePackage{biblatex}  % a modern alternative to bibtex for processing bibliography
 \RequirePackage[dvipsnames]{xcolor}  % provides ways to colorize words (must before hyperref)
 \RequirePackage{hyperref}  % helps creating internal/external hyperlinks
 \RequirePackage{arrayjobx}  % provides arrays for holding information of committee members
@@ -48,7 +47,8 @@
 \RequirePackage[titles]{tocloft}  % fine tunes loc, lof, and lot
 \RequirePackage{enumitem}  % fine tunes enumeration/lists
 \RequirePackage{nomencl}  % to have a list of symbols
-\RequirePackage{indentfirst}
+\RequirePackage{indentfirst}  % as its name
+\RequirePackage{xparse}  % LaTeX 3 style to define functions
 
 
 % =================================================================================================
@@ -177,10 +177,10 @@
 \doublespacing
 
 % skips between paragraphs
-\setlength{\parskip}{8pt}
+\setlength{\parskip}{8pt\relax}
 
 % indent (package ragged2e handles indentation after \begin{document})
-\setlength{\RaggedRightParindent}{0.5in}
+\setlength{\RaggedRightParindent}{0.5in\relax}
 
 % header and footer styles
 \pagestyle{fancy}  % use fancyhdr's fancy page style
@@ -193,53 +193,50 @@
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 
-% chapter heading format
-\renewcommand{\@makechapterhead}[1]{%
-    \begin{Center}\textbf{\chaptername\space\thechapter\ --\ #1}\end{Center}\vskip -\parskip%
+% base macro for chapters' headings' format
+\NewDocumentCommand{\@chapterhbase}{ o m }{%
+    \begingroup%
+        \singlespacing%
+        \IfNoValueTF{#1}
+            {\centering\textbf{#2}\par\nobreak}%
+            {\centering\textbf{#1#2}\par\nobreak}%
+        \vskip -\parskip\relax%
+    \endgroup%
+    \vskip -\baselineskip\relax\vskip 0pt\relax%
+    \begingroup%
+        \singlespacing%
+        \addvspace{3\baselineskip}%
+    \endgroup%
 }
-\renewcommand{\@makeschapterhead}[1]{\begin{Center}\textbf{#1}\end{Center}\vskip -\parskip}
 
-% heading formats for others
-\renewcommand{\section}[1]{%
-    \vskip -\parskip%
-    \begingroup%
-    \singlespacing%
-    \addvspace{\baselineskip}%
-    \@startsection{section}{1}{\z@}{\z@}{1sp}{\bfseries}[#1]{#1}%
+% chapter heading formats
+\RenewDocumentCommand{\@makechapterhead}{m}{\@chapterhbase[\chaptername\space\thechapter\ --\ ]{#1}}
+\RenewDocumentCommand{\@makeschapterhead}{m}{\@chapterhbase{#1}}
+
+% a macro to unify formats for all headers (except for chapters)
+\NewDocumentCommand{\@heading}{ m m m m o m }{
+    \nointerlineskip\relax%
+    \removelastskip\relax%
+    \begingroup
+        \singlespacing
+        \addvspace{1\baselineskip}
     \endgroup
+    \IfBooleanTF{#1}
+        {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}*{#6}}
+        {
+            \IfNoValueTF{#5}
+                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}{#6}}
+                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}[#5]{#6}}
+        }
+    \vskip -\parskip\relax%
 }
-\renewcommand{\subsection}[1]{%
-    \vskip -\parskip%
-    \begingroup%
-    \singlespacing%
-    \addvspace{\baselineskip}%
-    \@startsection{subsection}{2}{0.25in}{\z@}{1sp}{\bfseries}[#1]{#1}%
-    \endgroup
-}
-\renewcommand{\subsubsection}[1]{%
-    \vskip -\parskip%
-    \begingroup%
-    \singlespacing%
-    \addvspace{\baselineskip}%
-    \@startsection{subsubsection}{3}{0.5in}{\z@}{1sp}{\bfseries}[#1]{#1}%
-    \endgroup
-}
-\renewcommand{\paragraph}[1]{%
-    \vskip -\parskip%
-    \begingroup%
-    \singlespacing%
-    \addvspace{\baselineskip}%
-    \@startsection{paragraph}{4}{0.75in}{\z@}{1sp}{\bfseries}[#1]{#1}%
-    \endgroup
-}
-\renewcommand{\subparagraph}[1]{%
-    \vskip -\parskip%
-    \begingroup%
-    \singlespacing%
-    \addvspace{\baselineskip}%
-    \@startsection{subparagraph}{5}{1in}{\z@}{1sp}{\bfseries}[#1]{#1}%
-    \endgroup
-}
+
+% section, subsection, subsubsection, paragraph, subparagraph
+\RenewDocumentCommand{\section}{ s o m }{\@heading{#1}{section}{1}{\z@}[#2]{#3}}
+\RenewDocumentCommand{\subsection}{ s o m }{\@heading{#1}{subsection}{2}{0.25in}[#2]{#3}}
+\RenewDocumentCommand{\subsubsection}{ s o m }{\@heading{#1}{subsubsection}{3}{0.5in}[#2]{#3}}
+\RenewDocumentCommand{\paragraph}{ s o m }{\@heading{#1}{paragraph}{4}{0.75in}[#2]{#3}}
+\RenewDocumentCommand{\subparagraph}{ s o m }{\@heading{#1}{subparagraph}{5}{1in}[#2]{#3}}
 
 % removing extra \addvspace command in LoF and LoT when issuing \chapter
 \patchcmd{\Hy@org@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{}
@@ -296,24 +293,24 @@
     \thispagestyle{empty}  % however, don't actually show the page number at the bottom
     \pdfbookmark[0]{Title Page}{TitlePage}%
     \begingroup%
-    \setlength{\parskip}{0pt}%
-    \Centering%
-    \singlespacing%
-    \textbf{\@title}\\[3\baselineskip]%
-    \textbf{by \@author}\\[3\baselineskip]%
-    \multido{\i=1+1}{10}{%
-        \check@prevdegrees(\i)\ifemptydata\multidostop\else\cachedata\\\fi%
-    }
-    \vskip 2\baselineskip%
-    A Dissertation submitted to\par\vskip 3\baselineskip
-    The Faculty of\\%
-    The \@school~\\%
-    of The George Washington University\\%
-    in partial fulfillment of the requirements\\%
-    for the degree of Doctor of Philosophy\\[3\baselineskip]%
-    \@gradmonth, \@graddate, \@gradyear\\[3\baselineskip]%
-    Dissertation directed by\\[\baselineskip]%
-    \@advisor\\%
+        \setlength{\parskip}{0pt}%
+        \centering%
+        \singlespacing%
+        \textbf{\@title}\\[3\baselineskip]%
+        \textbf{by \@author}\\[3\baselineskip]%
+        \multido{\i=1+1}{10}{%
+            \check@prevdegrees(\i)\ifemptydata\multidostop\else\cachedata\\\fi%
+        }
+        \vskip 2\baselineskip\relax%
+        A Dissertation submitted to\par\vskip 3\baselineskip\relax%
+        The Faculty of\\%
+        The \@school~\\%
+        of The George Washington University\\%
+        in partial fulfillment of the requirements\\%
+        for the degree of Doctor of Philosophy\\[3\baselineskip]%
+        \@gradmonth, \@graddate, \@gradyear\\[3\baselineskip]%
+        Dissertation directed by\\[\baselineskip]%
+        \@advisor\\%
     \endgroup%
     \restoregeometry%
 }
@@ -325,28 +322,31 @@
     \newpage%
     \pdfbookmark[0]{Certification}{CertPage}%
     \begingroup%
-    \setlength{\parskip}{0pt}%
-    \doublespacing%
-    \noindent%
-    The \@school~of The George Washington University certifies that \@author~has passed the
-    Final Examination for the degree of Doctor of Philosophy as of \@defdate. This is the final
-    and approved form of the Dissertation.\par%
+        \setlength{\parskip}{0pt}%
+        \doublespacing%
+        \noindent%
+        The \@school~of The George Washington University certifies that \@author~has passed the
+        Final Examination for the degree of Doctor of Philosophy as of \@defdate. This is the final
+        and approved form of the Dissertation.\par%
     \endgroup%
     \begingroup%
-    \singlespacing%
-    \vskip 3\baselineskip%
-    \begin{center}%
-        \textbf{\@title}\\[3\baselineskip]%
-        \@author\\[3\baselineskip]%
-    \end{center}%
-    Dissertation Research Committee:\vskip \baselineskip%
-    \begin{itemize}[leftmargin=0.5in, style=multiline, topsep=0pt, partopsep=0pt, itemsep=0pt,%
-            parsep=\baselineskip]%
-        \multido{\i=1+1}{10}{
-        \check@committees(\i)%
-        \ifemptydata\multidostop\else\item[]\cachedata\fi%
-    }%
-    \end{itemize}%
+        \setlength{\parskip}{0pt}%
+        \singlespacing%
+        \vskip 3\baselineskip\relax%
+        \begin{center}%
+            \textbf{\@title}\\[3\baselineskip]%
+            \@author\\[3\baselineskip]%
+        \end{center}%
+        Dissertation Research Committee:\vskip \baselineskip\relax%
+        \begin{description}[
+            leftmargin=0.5in, style=multiline, topsep=0pt, partopsep=0pt, %
+            itemsep=0pt, parsep=\baselineskip%
+        ]%
+            \multido{\i=1+1}{10}{%
+                \check@committees(\i)%
+                \ifemptydata\multidostop\else\item \cachedata\fi%
+            }%
+        \end{description}%
     \endgroup%
 }
 
@@ -357,13 +357,13 @@
     \newpage%
     \pdfbookmark[0]{Copyright}{CopyrightPage}%
     \begingroup%
-    \singlespacing%
-    \vspace*{\fill}  % let latex automatically determine how much vertical space it needs
-    \noindent%
-    \begin{minipage}[c][3\baselineskip][c]{\textwidth}
-        \Centering© Copyright \@gradyear~by \@author\\ All rights reserved
-    \end{minipage}
-    \vspace{\fill}  % let latex automatically determine how much vertical space it needs
+        \singlespacing%
+        \vspace*{\fill}  % let latex automatically determine how much vertical space it needs
+        \noindent%
+        \begin{minipage}[c][3\baselineskip][c]{\textwidth}
+            \centering© Copyright \@gradyear~by \@author\\ All rights reserved
+        \end{minipage}
+        \vspace{\fill}  % let latex automatically determine how much vertical space it needs
     \endgroup%
 }
 
@@ -401,7 +401,7 @@
     \newpage%
     \@addanchor{chapter}{Abstract of Dissertation}%
     \chapter*{Abstract of Dissertation}
-    {\Centering\textbf{\@title}\\}%
+    {\centering\textbf{\@title}\\}%
     \@abstract%
 }
 
@@ -412,42 +412,41 @@
 \newrobustcmd*{\@tocpage}{%
     \newpage%
     \begingroup%
-    \singlespacing  % must be first to correctly setup \baselineskip
-    % vertical spacing before entries (to simulate double spacing)
-    \setlength{\cftbeforepartskip}{0.6\baselineskip}%
-    \setlength{\cftbeforechapskip}{0.6\baselineskip}%
-    \setlength{\cftbeforesecskip}{0.6\baselineskip}%
-    \setlength{\cftbeforesubsecskip}{0.6\baselineskip}%
-    \setlength{\cftbeforesubsubsecskip}{0.6\baselineskip}%
-    \setlength{\cftbeforeparaskip}{0.6\baselineskip}%
-    \setlength{\cftbeforesubparaskip}{0.6\baselineskip}%
-    % indent of each entries (spec not found in guidelines)
-    \setlength{\cftpartindent}{0in}%
-    \setlength{\cftchapindent}{0in}%
-    \setlength{\cftsecindent}{0.25in}%
-    \setlength{\cftsubsecindent}{0.5in}%
-    \setlength{\cftsubsubsecindent}{0.75in}%
-    \setlength{\cftparaindent}{1in}%
-    \setlength{\cftsubparaindent}{1.25in}%
-    % dots
-    \renewrobustcmd*{\cftdotsep}{1}%
-    \renewrobustcmd*{\cftchapdotsep}{\cftdotsep}%
-    % prefix: part
-    \renewrobustcmd*{\cftpartpresnum}{Part }%
-    % prefix chapter
-    \setlength{\cftchapnumwidth}{0.85in}%
-    \renewrobustcmd*{\cftchappresnum}{Chapter }%
-    \renewrobustcmd*{\cftchapaftersnum}{:}%
-    % disable the page numbers for parts
-    \cftpagenumbersoff{part}%
-    \setlength{\cftparskip}{0pt}%
-    \setlength{\parskip}{0pt}%
-    % finally show table of content
-    \@addanchor{chapter}{Table of Contents}%
-    \chapter*{Table of Contents}%
-    \singlespacing  % to revert the \doublespacing added by \chapter*
-    \vskip 0.4\baselineskip  % to compensate the \cftbeforechapskip
-    \@starttoc{toc}%
+        \singlespacing  % must be first to correctly setup \baselineskip
+        % vertical spacing before entries (to simulate double spacing)
+        \setlength{\cftbeforepartskip}{0.6\baselineskip}%
+        \setlength{\cftbeforechapskip}{0.6\baselineskip}%
+        \setlength{\cftbeforesecskip}{0.6\baselineskip}%
+        \setlength{\cftbeforesubsecskip}{0.6\baselineskip}%
+        \setlength{\cftbeforesubsubsecskip}{0.6\baselineskip}%
+        \setlength{\cftbeforeparaskip}{0.6\baselineskip}%
+        \setlength{\cftbeforesubparaskip}{0.6\baselineskip}%
+        % indent of each entries (spec not found in guidelines)
+        \setlength{\cftpartindent}{0in}%
+        \setlength{\cftchapindent}{0in}%
+        \setlength{\cftsecindent}{0.25in}%
+        \setlength{\cftsubsecindent}{0.5in}%
+        \setlength{\cftsubsubsecindent}{0.75in}%
+        \setlength{\cftparaindent}{1in}%
+        \setlength{\cftsubparaindent}{1.25in}%
+        % dots
+        \renewrobustcmd*{\cftdotsep}{1}%
+        \renewrobustcmd*{\cftchapdotsep}{\cftdotsep}%
+        % prefix: part
+        \renewrobustcmd*{\cftpartpresnum}{Part }%
+        % prefix chapter
+        \setlength{\cftchapnumwidth}{0.85in}%
+        \renewrobustcmd*{\cftchappresnum}{Chapter }%
+        \renewrobustcmd*{\cftchapaftersnum}{:}%
+        % disable the page numbers for parts
+        \cftpagenumbersoff{part}%
+        \setlength{\cftparskip}{0pt}%
+        \setlength{\parskip}{0pt}%
+        % finally show table of content
+        \@addanchor{chapter}{Table of Contents}%
+        \chapter*{Table of Contents}%
+        \vskip -0.6\baselineskip\relax  % to compensate the \cftbeforechapskip
+        \@starttoc{toc}%
     \endgroup%
 }
 
@@ -458,16 +457,17 @@
 \newrobustcmd*{\@lofpage}{%
     \newpage%
     \begingroup%
-    \singlespacing  % must be first to correctly setup \baselineskip
-    \setlength{\cftbeforefigskip}{\baselineskip}  % to simulate double spacing
-    \setlength{\cftfigindent}{0in}  % entry indent (spec not found in guidelines)
-    \setlength{\cftfignumwidth}{1in}  % label width (spec not found in guidelines)
-    \renewrobustcmd*{\cftdotsep}{1}  %% dots
-    \renewrobustcmd*{\cftfigpresnum}{Figure }  % label prefix
-    \@addanchor{chapter}{List of Figures}
-    \chapter*{List of Figures}%
-    \singlespacing  % to revert the \doublespacing added by \chapter*
-    \@starttoc{lof}  % show lof
+        \singlespacing  % must be first to correctly setup \baselineskip
+        \setlength{\parskip}{0pt}%
+        \setlength{\cftbeforefigskip}{\baselineskip}  % to simulate double spacing
+        \setlength{\cftfigindent}{0in}  % entry indent (spec not found in guidelines)
+        \setlength{\cftfignumwidth}{1in}  % label width (spec not found in guidelines)
+        \renewrobustcmd*{\cftdotsep}{1}  %% dots
+        \renewrobustcmd*{\cftfigpresnum}{Figure }  % label prefix
+        \@addanchor{chapter}{List of Figures}
+        \chapter*{List of Figures}%
+        \vskip -\baselineskip\relax% to compensate the first \cftxxxxbeforeskip
+        \@starttoc{lof}  % show lof
     \endgroup%
 }
 
@@ -478,16 +478,17 @@
 \newrobustcmd*{\@lotpage}{%
     \newpage%
     \begingroup%
-    \singlespacing  % must be first to correctly setup \baselineskip
-    \setlength{\cftbeforetabskip}{\baselineskip}  % to simulate double spacing
-    \setlength{\cfttabindent}{0in}  % entry indent (spec not found in guidelines)
-    \setlength{\cfttabnumwidth}{1in}  % label width (spec not found in guidelines)
-    \renewrobustcmd*{\cftdotsep}{1}  % dots
-    \renewrobustcmd*{\cfttabpresnum}{Table }  % label prefix
-    \@addanchor{chapter}{List of Tables}
-    \chapter*{List of Tables}%
-    \singlespacing  % to revert the \doublespacing added by \chapter*
-    \@starttoc{lot}  % show lot
+        \singlespacing  % must be first to correctly setup \baselineskip
+        \setlength{\parskip}{0pt}%
+        \setlength{\cftbeforetabskip}{\baselineskip}  % to simulate double spacing
+        \setlength{\cfttabindent}{0in}  % entry indent (spec not found in guidelines)
+        \setlength{\cfttabnumwidth}{1in}  % label width (spec not found in guidelines)
+        \renewrobustcmd*{\cftdotsep}{1}  % dots
+        \renewrobustcmd*{\cfttabpresnum}{Table }  % label prefix
+        \@addanchor{chapter}{List of Tables}
+        \chapter*{List of Tables}%
+        \vskip -\baselineskip\relax% to compensate the first \cftxxxxbeforeskip
+        \@starttoc{lot}  % show lot
     \endgroup%
 }
 
@@ -497,19 +498,18 @@
 % =================================================================================================
 \newrobustcmd*{\@lospage}{%
     \begingroup%
-    \newpage%
-    \renewenvironment{thenomenclature}{%
-        \begin{description}[%
-            left=0pt, style=multiline, topsep=0pt, partopsep=0pt, itemsep=0pt,%
-            parsep=\baselineskip]%
-    }{%
-        \end{description}%
-    }%
-    \@addanchor{chapter}{List of Symbols}%
-    \chapter*{List of Symbols}%
-    \singlespacing%
-    \vskip \baselineskip%
-    \printnomenclature%
+        \newpage%
+        \singlespacing%
+        \renewenvironment{thenomenclature}{%
+            \begin{description}[%
+                left=0pt, style=multiline, topsep=0pt, partopsep=0pt, itemsep=0pt,%
+                parsep=\baselineskip]%
+        }{%
+            \end{description}%
+        }%
+        \@addanchor{chapter}{List of Symbols}%
+        \chapter*{List of Symbols}%
+        \printnomenclature%
     \endgroup%
 }
 
@@ -521,6 +521,26 @@
     \newpage%
     \@addanchor{chapter}{Preface}%
     \chapter*{Preface}\@preface%
+}
+
+
+% =================================================================================================
+% lightly adjusting styles for bibliography (if using biblatex)
+% =================================================================================================
+\newrobustcmd*{\@adjustbib}{%
+    \@ifpackageloaded{biblatex}{%
+        \AtBeginBibliography{\nointerlineskip\vskip 2\baselineskip\relax\vskip 0pt\relax}
+        \renewrobustcmd*{\bibsetup}{%
+            \singlespacing%
+            \setlength{\bibitemsep}{\baselineskip}%
+            \setlength{\parskip}{\z@}%
+        }%
+        \defbibheading{bibintoc}[\bibname]{\chapter*{##1}}
+    }{%
+        \ClassWarningNoLine{gw-dissertation}{%
+            Not detecting biblatex. The user has to do the formatting of bibliography manually%
+        }%
+    }%
 }
 
 
@@ -541,11 +561,18 @@
         \protect\renewrobustcmd*{\protect\cftpartpresnum}{}%
     }%
     \phantomsection  % add a virtual section so we can get a bookmark anchor
-    %\addcontentsline{toc}{part}{Appendices}  % add `Appendices` as a part in ToC
     \stepcounter{part}  % advance the part counter because `Appendices` serves as a Part
     \renewcommand\chaptername{Appendix}  % change the chapter prefix from Chapter to Appendix
     \setcounter{chapter}{0}  % reset chapter counter because now the chapters represent appendices
     \renewcommand{\thechapter}{\Alph{chapter}}  % display the chapter count with uppercase letters
+}
+
+
+% =================================================================================================
+%% things to be automatically added right before `\begin{document}`
+% =================================================================================================
+\AtEndPreamble{%
+    \@adjustbib%
 }
 
 
