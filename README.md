@@ -43,6 +43,9 @@ options. Additionally, there two more class options:
 
 This is a document class, not a package. Use `\documentclass{gw-dissertation}` to use the class.
 
+### Front matter
+----------------
+
 To configure front matter:
 
 | command | note |
@@ -70,6 +73,7 @@ To configure front matter:
    degrees will be present in a first-in-first-out manner.
 2. Similar to `\prevdegree`, this command can be called multiple times.
 
+
 To control whether to show each page in the front matter, use `\show<page name>true` to show a page
 or `\show<page name>false` to make the page invisible. The following table shows available page
 names in the front matter:
@@ -90,6 +94,15 @@ names in the front matter:
 | glossary | off | not implemented yet |
 | preface | off | auto-turned on if `\preface` is called |
 
+
+### Bibliography
+----------------
+
+The class only intervenes the format of bibliography/references when an user uses `biblatex` and
+triggers the bibliography with `printbibliography[heading=bibintoc, ...]`. Otherwise, users have to
+deal with the reference format manually. As per GW and SEAS guidelines, users are free to choose
+whatever citation and bibliography styles. This class only ensures 1) single-line spacing within
+each entry, 2) double-line spacing between entries, and 3) the spaces after heading.
 
 ## Example
 ----------
