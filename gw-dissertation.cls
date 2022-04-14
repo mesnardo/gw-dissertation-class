@@ -101,11 +101,11 @@
 
 
 % content in the dedication, acknowledge, disclaimer, and abstract pages
-\NewDocumentCommand{\dedication}{m}{\RenewDocumentCommand{\@dedication}{}{#1}\showdedicationtrue}
-\NewDocumentCommand{\acknowledgments}{m}{\RenewDocumentCommand{\@acknowledgments}{}{#1}\showacknowledgmentstrue}
-\NewDocumentCommand{\disclaimer}{m}{\RenewDocumentCommand{\@disclaimer}{}{#1}\showdisclaimertrue}
-\RenewDocumentCommand{\abstract}{m}{\RenewDocumentCommand{\@abstract}{}{#1}}
-\NewDocumentCommand{\preface}{m}{\RenewDocumentCommand{\@preface}{}{#1}\showprefacetrue}
+\NewDocumentCommand{\dedication}{+m}{\RenewDocumentCommand{\@dedication}{}{#1}\showdedicationtrue}
+\NewDocumentCommand{\acknowledgments}{+m}{\RenewDocumentCommand{\@acknowledgments}{}{#1}\showacknowledgmentstrue}
+\NewDocumentCommand{\disclaimer}{+m}{\RenewDocumentCommand{\@disclaimer}{}{#1}\showdisclaimertrue}
+\RenewDocumentCommand{\abstract}{+m}{\RenewDocumentCommand{\@abstract}{}{#1}}
+\NewDocumentCommand{\preface}{+m}{\RenewDocumentCommand{\@preface}{}{#1}\showprefacetrue}
 
 % the author's previous degrees
 \NewDocumentCommand{\prevdegree}{m}{\@prevdegrees(\the@prevdegreecounter)={#1}\stepcounter{@prevdegreecounter}}
