@@ -90,50 +90,50 @@
 % =================================================================================================
 % public functions
 % =================================================================================================
-\renewrobustcmd*{\title}[1]{\renewrobustcmd*{\@title}{{#1}}}  % dissertation title
-\renewrobustcmd*{\author}[1]{\renewrobustcmd*{\@author}{{#1}}}  % author's name
-\newrobustcmd*{\defdate}[1]{\renewrobustcmd*{\@defdate}{{#1}}}  % defense date
-\newrobustcmd*{\gradyear}[1]{\renewrobustcmd*{\@gradyear}{{#1}}}  % degree conferral year
-\newrobustcmd*{\gradmonth}[1]{\renewrobustcmd*{\@gradmonth}{{#1}}}  % degree conferral month
-\newrobustcmd*{\graddate}[1]{\renewrobustcmd*{\@graddate}{{#1}}}  % degree conferral date
-\newrobustcmd*{\advisor}[2]{\renewrobustcmd*{\@advisor}{{#1}\\{#2}}}  % advisor's name and title
-\newrobustcmd*{\school}[1]{\renewrobustcmd*{\@school}{{#1}}}  % the school's name at GW
+\RenewDocumentCommand{\title}{m}{\RenewDocumentCommand{\@title}{}{#1}}  % dissertation title
+\RenewDocumentCommand{\author}{m}{\RenewDocumentCommand{\@author}{}{#1}}  % author's name
+\NewDocumentCommand{\defdate}{m}{\RenewDocumentCommand{\@defdate}{}{#1}}  % defense date
+\NewDocumentCommand{\gradyear}{m}{\RenewDocumentCommand{\@gradyear}{}{#1}}  % degree conferral year
+\NewDocumentCommand{\gradmonth}{m}{\RenewDocumentCommand{\@gradmonth}{}{#1}}  % degree conferral month
+\NewDocumentCommand{\graddate}{m}{\RenewDocumentCommand{\@graddate}{}{#1}}  % degree conferral date
+\NewDocumentCommand{\advisor}{m m}{\RenewDocumentCommand{\@advisor}{}{#1\\#2}}  % advisor's name and title
+\NewDocumentCommand{\school}{m}{\RenewDocumentCommand{\@school}{}{#1}}  % the school's name at GW
 
 
 % content in the dedication, acknowledge, disclaimer, and abstract pages
-\newrobustcmd{\dedication}[1]{\renewrobustcmd{\@dedication}{{#1}}\showdedicationtrue}
-\newrobustcmd{\acknowledgments}[1]{\renewrobustcmd{\@acknowledgments}{{#1}}\showacknowledgmentstrue}
-\newrobustcmd{\disclaimer}[1]{\renewrobustcmd{\@disclaimer}{{#1}}\showdisclaimertrue}
-\renewrobustcmd{\abstract}[1]{\renewrobustcmd{\@abstract}{{#1}}}
-\newrobustcmd{\preface}[1]{\renewrobustcmd{\@preface}{{#1}}\showprefacetrue}
+\NewDocumentCommand{\dedication}{m}{\RenewDocumentCommand{\@dedication}{}{#1}\showdedicationtrue}
+\NewDocumentCommand{\acknowledgments}{m}{\RenewDocumentCommand{\@acknowledgments}{}{#1}\showacknowledgmentstrue}
+\NewDocumentCommand{\disclaimer}{m}{\RenewDocumentCommand{\@disclaimer}{}{#1}\showdisclaimertrue}
+\RenewDocumentCommand{\abstract}{m}{\RenewDocumentCommand{\@abstract}{}{#1}}
+\NewDocumentCommand{\preface}{m}{\RenewDocumentCommand{\@preface}{}{#1}\showprefacetrue}
 
 % the author's previous degrees
-\newrobustcmd*{\prevdegree}[1]{\@prevdegrees(\the@prevdegreecounter)={#1}\stepcounter{@prevdegreecounter}}
+\NewDocumentCommand{\prevdegree}{m}{\@prevdegrees(\the@prevdegreecounter)={#1}\stepcounter{@prevdegreecounter}}
 
 % committee members
-\newrobustcmd*{\committee}[1]{\@committees(\the@committeecounter)={#1}\stepcounter{@committeecounter}}
+\NewDocumentCommand{\committee}{m}{\@committees(\the@committeecounter)={#1}\stepcounter{@committeecounter}}
 
 % line spacing
-\newrobustcmd*{\singlespacing}{\renewcommand{\baselinestretch}{\@factor@single}\selectfont}
-\newrobustcmd*{\doublespacing}{\renewcommand{\baselinestretch}{\@factor@double}\selectfont}
+\NewDocumentCommand{\singlespacing}{}{\RenewExpandableDocumentCommand{\baselinestretch}{}{\@factor@single}\selectfont}
+\NewDocumentCommand{\doublespacing}{}{\RenewExpandableDocumentCommand{\baselinestretch}{}{\@factor@double}\selectfont}
 
 
 % =================================================================================================
 % private variables
 % =================================================================================================
-\renewrobustcmd*{\@title}{\{Dissertation Title\}}  % default value for dissertation title
-\renewrobustcmd*{\@author}{\{Author\}}  % default value for author
-\newrobustcmd*{\@defdate}{\{Defense date\}}  % default value for defense date
-\newrobustcmd*{\@gradyear}{\{Graduation year\}}  % default value for graduation year
-\newrobustcmd*{\@gradmonth}{\{Graduation month\}}  % default value for graduation month
-\newrobustcmd*{\@graddate}{\{Graduation date\}}  % default value for graduation date
-\newrobustcmd*{\@advisor}{\{Advisor's Name\}\\\{Advisor's title\}}  % default value for adviser
-\newrobustcmd*{\@school}{\{Name of your school\}}  % default value for school name
-\newrobustcmd{\@dedication}{\{Dedication body\}}  % default content in dedication page
-\newrobustcmd{\@acknowledgments}{\{Acknowledgment body\}}  % default content in acknowledgment page
-\newrobustcmd{\@disclaimer}{\{Disclaimer body\}}  % default content in disclaimer page
-\newrobustcmd{\@abstract}{\{Abstract body\}}  % default content in abstract page
-\newrobustcmd{\@preface}{\{Preface body\}}  % default content in preface page
+\RenewDocumentCommand{\@title}{}{\{Dissertation Title\}}  % default value for dissertation title
+\RenewDocumentCommand{\@author}{}{\{Author\}}  % default value for author
+\NewDocumentCommand{\@defdate}{}{\{Defense date\}}  % default value for defense date
+\NewDocumentCommand{\@gradyear}{}{\{Graduation year\}}  % default value for graduation year
+\NewDocumentCommand{\@gradmonth}{}{\{Graduation month\}}  % default value for graduation month
+\NewDocumentCommand{\@graddate}{}{\{Graduation date\}}  % default value for graduation date
+\NewDocumentCommand{\@advisor}{}{\{Advisor's Name\}\\\{Advisor's title\}}  % default value for adviser
+\NewDocumentCommand{\@school}{}{\{Name of your school\}}  % default value for school name
+\NewDocumentCommand{\@dedication}{}{\{Dedication body\}}  % default content in dedication page
+\NewDocumentCommand{\@acknowledgments}{}{\{Acknowledgment body\}}  % default content in acknowledgment page
+\NewDocumentCommand{\@disclaimer}{}{\{Disclaimer body\}}  % default content in disclaimer page
+\NewDocumentCommand{\@abstract}{}{\{Abstract body\}}  % default content in abstract page
+\NewDocumentCommand{\@preface}{}{\{Preface body\}}  % default content in preface page
 
 % use an array to hold previous degree
 \newcounter{@prevdegreecounter}
@@ -148,30 +148,18 @@
 \@committees(\the@committeecounter)={Insert at least one committee member}
 
 % single-line spacing factor: 0.9517 * 1.208 ~ 1.15 = single-line spacing scale in Google Docs
-\newrobustcmd*{\@factor@single}{0.9517241379310345}
+\NewDocumentCommand{\@factor@single}{}{0.9517241379310345}
 
 % double-line spacing factor: 1.9034 * 1.208 ~ 2.3 = double-line spacing scale in Google Docs
-\newrobustcmd*{\@factor@double}{1.903448275862069}
+\NewDocumentCommand{\@factor@double}{}{1.903448275862069}
 
 
 % =================================================================================================
-% private macros/functions
-% =================================================================================================
-% a macro returning a string that will be added to ToC and the PDF's bookmarks
-\newrobustcmd*{\@addanchor}[2]{\phantomsection\addcontentsline{toc}{#1}{#2}}%
-
-
-% =================================================================================================
-% global style configuration
+% global format configuration
 % =================================================================================================
 
 % margins and dimensions
-\geometry{letterpaper}
-\geometry{top=1in}
-\geometry{bottom=1in}
-\geometry{left=1.25in}
-\geometry{right=1.25in}
-\geometry{footskip=0.25in}  % guideline isn't clear it's 0.5 or 0.75in from bottom
+\geometry{letterpaper, top=1in, bottom=1in, left=1.25in, right=1.25in, footskip=0.25in}
 
 % default is double-line spacing
 \doublespacing
@@ -186,50 +174,16 @@
 \pagestyle{fancy}  % use fancyhdr's fancy page style
 \fancyhf{}  % clear default LaTeX's plain style
 \fancyfoot[C]{\thepage}  % position the page number at the bottom center
-\renewcommand{\headrulewidth}{0pt}  % make header separation line invisible
-\renewcommand{\footrulewidth}{0pt}  % make footer separation line invisible
+\RenewDocumentCommand{\headrulewidth}{}{0pt}  % make header separation line invisible
+\RenewDocumentCommand{\footrulewidth}{}{0pt}  % make footer separation line invisible
 
 % force the heading counter visible in text and ToC up to subparagraph
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 
-% base macro for chapters' headings' format
-\NewDocumentCommand{\@chapterhbase}{ o m }{%
-    \begingroup%
-        \singlespacing%
-        \IfNoValueTF{#1}
-            {\centering\textbf{#2}\par\nobreak}%
-            {\centering\textbf{#1#2}\par\nobreak}%
-        \vskip -\parskip\relax%
-    \endgroup%
-    \vskip -\baselineskip\relax\vskip 0pt\relax%
-    \begingroup%
-        \singlespacing%
-        \addvspace{3\baselineskip}%
-    \endgroup%
-}
-
 % chapter heading formats
 \RenewDocumentCommand{\@makechapterhead}{m}{\@chapterhbase[\chaptername\space\thechapter\ --\ ]{#1}}
 \RenewDocumentCommand{\@makeschapterhead}{m}{\@chapterhbase{#1}}
-
-% a macro to unify formats for all headers (except for chapters)
-\NewDocumentCommand{\@heading}{ m m m m o m }{
-    \nointerlineskip\relax%
-    \removelastskip\relax%
-    \begingroup
-        \singlespacing
-        \addvspace{1\baselineskip}
-    \endgroup
-    \IfBooleanTF{#1}
-        {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}*{#6}}
-        {
-            \IfNoValueTF{#5}
-                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}{#6}}
-                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}[#5]{#6}}
-        }
-    \vskip -\parskip\relax%
-}
 
 % section, subsection, subsubsection, paragraph, subparagraph
 \RenewDocumentCommand{\section}{ s o m }{\@heading{#1}{section}{1}{\z@}[#2]{#3}}
@@ -266,7 +220,6 @@
 \setsansfont{Arial}  % Sans Serif family
 \setmonofont{DejaVu Sans Mono}  % monospace (typewritter) family
 
-
 % math equation style configuration
 \unimathsetup{math-style=ISO}
 \unimathsetup{bold-style=ISO}
@@ -278,16 +231,55 @@
 
 % make sure the hyperlink IDs of chapters and parts are unique even when we restart the counter
 % (we restart the counter because appendicies)
-\renewcommand{\theHpart}{HPART\thepage}
-\renewcommand{\theHchapter}{HCHAP\thepage}
+\RenewExpandableDocumentCommand{\theHpart}{}{HPART\thepage}
+\RenewExpandableDocumentCommand{\theHchapter}{}{HCHAP\thepage}
 
-% trigger nomenclature generation
-\makenomenclature
+
+% =================================================================================================
+% private macros/functions/helpers
+% =================================================================================================
+
+% a macro returning a string that will be added to ToC and the PDF's bookmarks
+\NewDocumentCommand{\@addanchor}{m m}{\phantomsection\addcontentsline{toc}{#1}{#2}}%
+
+% base macro for chapter headings' format
+\NewDocumentCommand{\@chapterhbase}{o m}{%
+    \begingroup%
+        \singlespacing%
+        \IfNoValueTF{#1}
+            {\centering\textbf{#2}\par\nobreak}%
+            {\centering\textbf{#1#2}\par\nobreak}%
+        \vskip -\parskip\relax%
+    \endgroup%
+    \vskip -\baselineskip\relax\vskip 0pt\relax%
+    \begingroup%
+        \singlespacing%
+        \addvspace{3\baselineskip}%
+    \endgroup%
+}
+
+% a macro to unify formats for all headers (except for chapters)
+\NewDocumentCommand{\@heading}{m m m m o m}{
+    \nointerlineskip\relax%
+    \removelastskip\relax%
+    \begingroup
+        \singlespacing
+        \addvspace{1\baselineskip}
+    \endgroup
+    \IfBooleanTF{#1}
+        {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}*{#6}}
+        {
+            \IfNoValueTF{#5}
+                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}{#6}}
+                {\@startsection{#2}{#3}{#4}{\z@}{1sp}{\singlespacing\bfseries}[#5]{#6}}
+        }
+    \vskip -\parskip\relax%
+}
 
 % =================================================================================================
 %% front matter: title page
 % =================================================================================================
-\newrobustcmd*{\@titlepage}{%
+\NewDocumentCommand{\@titlepage}{}{%
     \newgeometry{top=2in, bottom=1in, left=1.25in, right=1.25in}%
     \pagenumbering{roman}  % the title page is counted as page i (in roman numeral system)
     \thispagestyle{empty}  % however, don't actually show the page number at the bottom
@@ -318,7 +310,7 @@
 % =================================================================================================
 % front matter: certification page
 % =================================================================================================
-\newrobustcmd*{\@certpage}{%
+\NewDocumentCommand{\@certpage}{}{%
     \newpage%
     \pdfbookmark[0]{Certification}{CertPage}%
     \begingroup%
@@ -353,7 +345,7 @@
 % =================================================================================================
 % front matter: copyright page
 % =================================================================================================
-\newrobustcmd*{\@copyrightpage}{%
+\NewDocumentCommand{\@copyrightpage}{}{%
     \newpage%
     \pdfbookmark[0]{Copyright}{CopyrightPage}%
     \begingroup%
@@ -370,7 +362,7 @@
 % =================================================================================================
 % front matter: dedication page
 % =================================================================================================
-\newrobustcmd*{\@dedicationpage}{%
+\NewDocumentCommand{\@dedicationpage}{}{%
     \newpage%
     \@addanchor{chapter}{Dedication}%
     \chapter*{Dedication}\@dedication%
@@ -379,7 +371,7 @@
 % =================================================================================================
 % front matter: acknowledgments page
 % =================================================================================================
-\newrobustcmd*{\@acknowledgmentspage}{%
+\NewDocumentCommand{\@acknowledgmentspage}{}{%
     \newpage%
     \@addanchor{chapter}{Acknowledgments}%
     \chapter*{Acknowledgments}\@acknowledgments%
@@ -388,7 +380,7 @@
 % =================================================================================================
 % front matter: disclaimer page
 % =================================================================================================
-\newrobustcmd*{\@disclaimerpage}{%
+\NewDocumentCommand{\@disclaimerpage}{}{%
     \newpage%
     \@addanchor{chapter}{Disclaimer}%
     \chapter*{Disclaimer}\@disclaimer%
@@ -397,7 +389,7 @@
 % =================================================================================================
 % front matter: abstract
 % =================================================================================================
-\newrobustcmd*{\@abstractpage}{%
+\NewDocumentCommand{\@abstractpage}{}{%
     \newpage%
     \@addanchor{chapter}{Abstract of Dissertation}%
     \chapter*{Abstract of Dissertation}
@@ -409,7 +401,7 @@
 % =================================================================================================
 % front matter: table of contents (toc)
 % =================================================================================================
-\newrobustcmd*{\@tocpage}{%
+\NewDocumentCommand{\@tocpage}{}{%
     \newpage%
     \begingroup%
         \singlespacing  % must be first to correctly setup \baselineskip
@@ -430,14 +422,14 @@
         \setlength{\cftparaindent}{1in}%
         \setlength{\cftsubparaindent}{1.25in}%
         % dots
-        \renewrobustcmd*{\cftdotsep}{1}%
-        \renewrobustcmd*{\cftchapdotsep}{\cftdotsep}%
+        \RenewDocumentCommand{\cftdotsep}{}{1}%
+        \RenewDocumentCommand{\cftchapdotsep}{}{\cftdotsep}%
         % prefix: part
-        \renewrobustcmd*{\cftpartpresnum}{Part }%
+        \RenewDocumentCommand{\cftpartpresnum}{}{Part }%
         % prefix chapter
         \setlength{\cftchapnumwidth}{0.85in}%
-        \renewrobustcmd*{\cftchappresnum}{Chapter }%
-        \renewrobustcmd*{\cftchapaftersnum}{:}%
+        \RenewDocumentCommand{\cftchappresnum}{}{Chapter }%
+        \RenewDocumentCommand{\cftchapaftersnum}{}{:}%
         % disable the page numbers for parts
         \cftpagenumbersoff{part}%
         \setlength{\cftparskip}{0pt}%
@@ -454,7 +446,7 @@
 % =================================================================================================
 % front matter: list of figures (lof)
 % =================================================================================================
-\newrobustcmd*{\@lofpage}{%
+\NewDocumentCommand{\@lofpage}{}{%
     \newpage%
     \begingroup%
         \singlespacing  % must be first to correctly setup \baselineskip
@@ -462,8 +454,8 @@
         \setlength{\cftbeforefigskip}{\baselineskip}  % to simulate double spacing
         \setlength{\cftfigindent}{0in}  % entry indent (spec not found in guidelines)
         \setlength{\cftfignumwidth}{1in}  % label width (spec not found in guidelines)
-        \renewrobustcmd*{\cftdotsep}{1}  %% dots
-        \renewrobustcmd*{\cftfigpresnum}{Figure }  % label prefix
+        \RenewDocumentCommand{\cftdotsep}{}{1}  %% dots
+        \RenewDocumentCommand{\cftfigpresnum}{}{Figure }  % label prefix
         \@addanchor{chapter}{List of Figures}
         \chapter*{List of Figures}%
         \vskip -\baselineskip\relax% to compensate the first \cftxxxxbeforeskip
@@ -475,7 +467,7 @@
 % =================================================================================================
 % front matter: list of tables (lot)
 % =================================================================================================
-\newrobustcmd*{\@lotpage}{%
+\NewDocumentCommand{\@lotpage}{}{%
     \newpage%
     \begingroup%
         \singlespacing  % must be first to correctly setup \baselineskip
@@ -483,8 +475,8 @@
         \setlength{\cftbeforetabskip}{\baselineskip}  % to simulate double spacing
         \setlength{\cfttabindent}{0in}  % entry indent (spec not found in guidelines)
         \setlength{\cfttabnumwidth}{1in}  % label width (spec not found in guidelines)
-        \renewrobustcmd*{\cftdotsep}{1}  % dots
-        \renewrobustcmd*{\cfttabpresnum}{Table }  % label prefix
+        \RenewDocumentCommand{\cftdotsep}{}{1}  % dots
+        \RenewDocumentCommand{\cfttabpresnum}{}{Table }  % label prefix
         \@addanchor{chapter}{List of Tables}
         \chapter*{List of Tables}%
         \vskip -\baselineskip\relax% to compensate the first \cftxxxxbeforeskip
@@ -496,11 +488,11 @@
 % =================================================================================================
 % front matter: list of symbols (los)
 % =================================================================================================
-\newrobustcmd*{\@lospage}{%
+\NewDocumentCommand{\@lospage}{}{%
     \begingroup%
         \newpage%
         \singlespacing%
-        \renewenvironment{thenomenclature}{%
+        \RenewDocumentEnvironment{thenomenclature}{}{%
             \begin{description}[%
                 left=0pt, style=multiline, topsep=0pt, partopsep=0pt, itemsep=0pt,%
                 parsep=\baselineskip]%
@@ -517,7 +509,7 @@
 % =================================================================================================
 % front matter: preface
 % =================================================================================================
-\newrobustcmd*{\@prefacepage}{%
+\NewDocumentCommand{\@prefacepage}{}{%
     \newpage%
     \@addanchor{chapter}{Preface}%
     \chapter*{Preface}\@preface%
@@ -527,10 +519,10 @@
 % =================================================================================================
 % lightly adjusting styles for bibliography (if using biblatex)
 % =================================================================================================
-\newrobustcmd*{\@adjustbib}{%
+\NewDocumentCommand{\@adjustbib}{}{%
     \@ifpackageloaded{biblatex}{%
         \AtBeginBibliography{\nointerlineskip\vskip 2\baselineskip\relax\vskip 0pt\relax}
-        \renewrobustcmd*{\bibsetup}{%
+        \RenewDocumentCommand{\bibsetup}{}{%
             \singlespacing%
             \setlength{\bibitemsep}{\baselineskip}%
             \setlength{\parskip}{\z@}%
@@ -547,24 +539,24 @@
 % =================================================================================================
 % custom appendix in the table of content and in the content
 % =================================================================================================
-\renewcommand*{\appendix}{%
-    % write `\renewrobustcmd*{\cftchapnumwidth}{0.96in}` to the *.toc file
+\RenewDocumentCommand{\appendix}{}{%
+    % write `\RenewDocumentCommand{\cftchapnumwidth}{}{0.96in}` to the *.toc file
     \addtocontents{toc}{%
-        \protect\renewrobustcmd*{\protect\cftchapnumwidth}{1.04in}%
+        \protect\RenewDocumentCommand{\protect\cftchapnumwidth}{}{1.04in}%
     }%
-    % write `\renewrobustcmd*{\cftchappresnum}{Appendix }` to the *.toc file
+    % write `\RenewDocumentCommand{\cftchappresnum}{Appendix }` to the *.toc file
     \addtocontents{toc}{%
-        \protect\renewrobustcmd*{\protect\cftchappresnum}{Appendix }%
+        \protect\RenewDocumentCommand{\protect\cftchappresnum}{}{Appendix }%
     }%
-    % write `\renewrobustcmd*{\cftpartpresnum}{}` to the *.toc file
+    % write `\RenewDocumentCommand{\cftpartpresnum}{}` to the *.toc file
     \addtocontents{toc}{%
-        \protect\renewrobustcmd*{\protect\cftpartpresnum}{}%
+        \protect\RenewDocumentCommand{\protect\cftpartpresnum}{}{}%
     }%
     \phantomsection  % add a virtual section so we can get a bookmark anchor
     \stepcounter{part}  % advance the part counter because `Appendices` serves as a Part
-    \renewcommand\chaptername{Appendix}  % change the chapter prefix from Chapter to Appendix
+    \RenewDocumentCommand{\chaptername}{}{Appendix}  % change the chapter prefix from Chapter to Appendix
     \setcounter{chapter}{0}  % reset chapter counter because now the chapters represent appendices
-    \renewcommand{\thechapter}{\Alph{chapter}}  % display the chapter count with uppercase letters
+    \RenewDocumentCommand{\thechapter}{}{\Alph{chapter}}  % display the chapter count with uppercase letters
 }
 
 
@@ -572,7 +564,8 @@
 %% things to be automatically added right before `\begin{document}`
 % =================================================================================================
 \AtEndPreamble{%
-    \@adjustbib%
+    \@adjustbib  % adjust bibliography format if using biblatex
+    \makenomenclature  % trigger nomenclature generation
 }
 
 
