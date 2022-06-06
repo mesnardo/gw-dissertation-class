@@ -537,7 +537,6 @@
             \setlength{\bibitemsep}{\baselineskip}%
             \setlength{\parskip}{\z@}%
         }%
-        \defbibheading{bibintoc}[\bibname]{\chapter*{##1}}
     }{%
         \ClassWarningNoLine{gw-dissertation}{%
             Not detecting biblatex. The user has to do the formatting of bibliography manually%
@@ -566,7 +565,7 @@
     \stepcounter{part}  % advance the part counter because `Appendices` serves as a Part
     \RenewDocumentCommand{\chaptername}{}{Appendix}  % change the chapter prefix from Chapter to Appendix
     \setcounter{chapter}{0}  % reset chapter counter because now the chapters represent appendices
-    \RenewDocumentCommand{\thechapter}{}{\Alph{chapter}}  % display the chapter count with uppercase letters
+    \RenewExpandableDocumentCommand{\thechapter}{}{\Alph{chapter}}  % display the chapter count with uppercase letters
 }
 
 
