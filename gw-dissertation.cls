@@ -49,6 +49,7 @@
 \RequirePackage{nomencl}  % to have a list of symbols
 \RequirePackage{indentfirst}  % as its name
 \RequirePackage{xparse}  % LaTeX 3 style to define functions
+\RequirePackage{caption} % change the formats of fig/table captions
 
 
 % =================================================================================================
@@ -169,6 +170,8 @@
 
 % indent (package ragged2e handles indentation after \begin{document})
 \setlength{\RaggedRightParindent}{0.5in\relax}
+\AtBeginEnvironment{figure}{\setlength{\RaggedRightParindent}{0em}}
+\AtBeginEnvironment{table}{\setlength{\RaggedRightParindent}{0em}}
 
 % header and footer styles
 \pagestyle{fancy}  % use fancyhdr's fancy page style
@@ -234,6 +237,13 @@
 \RenewExpandableDocumentCommand{\theHpart}{}{HPART\thepage}
 \RenewExpandableDocumentCommand{\theHchapter}{}{HCHAP\thepage}
 
+% caption format (figures and tables): no smaller than 8pt; single spacing
+\captionsetup{format=hang}
+\captionsetup{justification=raggedright}
+\captionsetup{singlelinecheck=true}
+\captionsetup{font={footnotesize, stretch=\@factor@single}}
+\captionsetup{labelfont={bf}}
+\captionsetup{position=bottom}
 
 % =================================================================================================
 % private macros/functions/helpers
