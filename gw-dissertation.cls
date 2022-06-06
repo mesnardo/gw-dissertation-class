@@ -50,6 +50,8 @@
 \RequirePackage{indentfirst}  % as its name
 \RequirePackage{xparse}  % LaTeX 3 style to define functions
 \RequirePackage{caption} % change the formats of fig/table captions
+\RequirePackage{bookmark}  % use this package rather than hyperref for bookmarks
+\RequirePackage{xstring}  % string manipulation
 
 
 % =================================================================================================
@@ -162,6 +164,11 @@
 % margins and dimensions
 \geometry{letterpaper, top=1in, bottom=1in, left=1.25in, right=1.25in, footskip=0.25in}
 
+% bookmark config
+\bookmarksetup{numbered}
+\bookmarksetup{open}
+\bookmarksetup{addtohook=\@bookmarkprefix}
+
 % default is double-line spacing
 \doublespacing
 
@@ -248,6 +255,17 @@
 % =================================================================================================
 % private macros/functions/helpers
 % =================================================================================================
+
+% a macro to add "Chapter" and "Appendix" to bookmarks
+\NewDocumentCommand{\@bookmarkprefix}{}{%
+    \IfSubStr{\bookmarkget{dest}}{chapter}{%
+        \preto\bookmark@text{\@chapapp\space}%
+    }{%
+        \IfSubStr{\bookmarkget{dest}}{appendix}{%
+            \preto\bookmark@text{\@chapapp\space}%
+        }{}%
+    }%
+}
 
 % a macro returning a string that will be added to ToC and the PDF's bookmarks
 \NewDocumentCommand{\@addanchor}{m m}{\phantomsection\addcontentsline{toc}{#1}{#2}}%
@@ -548,6 +566,11 @@
 % =================================================================================================
 % custom appendix in the table of content and in the content
 % =================================================================================================
+
+% make a copy of command \appendix from package hyperref
+\let\@old@appendix\appendix
+
+% our own \appendix
 \RenewDocumentCommand{\appendix}{}{%
     % write `\RenewDocumentCommand{\cftchapnumwidth}{}{0.96in}` to the *.toc file
     \addtocontents{toc}{%
@@ -561,11 +584,11 @@
     \addtocontents{toc}{%
         \protect\RenewDocumentCommand{\protect\cftpartpresnum}{}{}%
     }%
-    \phantomsection  % add a virtual section so we can get a bookmark anchor
     \stepcounter{part}  % advance the part counter because `Appendices` serves as a Part
     \RenewDocumentCommand{\chaptername}{}{Appendix}  % change the chapter prefix from Chapter to Appendix
     \setcounter{chapter}{0}  % reset chapter counter because now the chapters represent appendices
     \RenewExpandableDocumentCommand{\thechapter}{}{\Alph{chapter}}  % display the chapter count with uppercase letters
+    \@old@appendix
 }
 
 
