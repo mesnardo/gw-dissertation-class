@@ -52,6 +52,7 @@
 \RequirePackage{caption} % change the formats of fig/table captions
 \RequirePackage{bookmark}  % use this package rather than hyperref for bookmarks
 \RequirePackage{xstring}  % string manipulation
+\RequirePackage{glossaries-extra}  % to have glossary page
 
 
 % =================================================================================================
@@ -535,6 +536,17 @@
 
 
 % =================================================================================================
+% front matter: glossary
+% =================================================================================================
+\NewDocumentCommand{\@glossarypage}{}{%
+    \begingroup%
+        \singlespacing%
+        \printglossaries%
+    \endgroup%
+}
+
+
+% =================================================================================================
 % front matter: preface
 % =================================================================================================
 \NewDocumentCommand{\@prefacepage}{}{%
@@ -598,6 +610,7 @@
 \AtEndPreamble{%
     \@adjustbib  % adjust bibliography format if using biblatex
     \makenomenclature  % trigger nomenclature generation
+    \ifshowglossary\makeglossaries\fi  % trigger glossary generation
 }
 
 
@@ -616,7 +629,7 @@
     \ifshowlof\@lofpage\fi%
     \ifshowlot\@lotpage\fi%
     \ifshowlos\@lospage\fi%
-    %\ifshowglossary\newpage\glossary\fi%
+    \ifshowglossary\@glossarypage\fi%
     \ifshowpreface\@prefacepage\fi%
     \newpage%
     \pagenumbering{arabic}  % restart page counter using arabic numerals

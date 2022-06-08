@@ -91,8 +91,17 @@ names in the front matter:
 | lof | on | list of figures; required if figures are present |
 | lot | on | list of tables; required if tables are present |
 | los | on | use command `\nomenclature` from package `nomencl` to define <br> symbols |
-| glossary | off | not implemented yet |
+| glossary | on | through package `glossaries-extra` |
 | preface | off | auto-turned on if `\preface` is called |
+
+***Note***
+
+1. The list of symbols (through package `nomencl`) and the glossary page (through package
+   `glossaries-extra`) require special settings for compilation. Please see the `latexmkrc` in the
+   example directory for how to configure them.
+2. Don't include `\makenomenclature`, `\printnomenclature`, `\makeglossaries`, `\printglossaries`,
+   or/and `\printglossary` in your manuscript. They are already handled in the style definition.
+   Just use the commands to define glossary terms and symbols directly.
 
 
 ### Bibliography
@@ -113,6 +122,8 @@ When using command-line in Linux, simply go to the example folder and execute:
 ```shell
 $ latexmk
 ```
+
+Many GUI interfaces also have places for users to configure and use `latexmk`.
 
 
 ## Format guidelines

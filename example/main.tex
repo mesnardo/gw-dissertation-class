@@ -29,6 +29,10 @@
 \committee{Joseph Smith, Associate Professor of History, University of Delaware, Committee Member}
 \committee{Joseph Smith, Senior Researcher, American Historical Society, Committee Member}
 
+% glossaries must be defined be in the preamble (or a tex file included in the preambel)
+\newglossaryentry{ex}{name={sample},description={an example}}
+\newabbreviation{svm}{SVM}{support vector machine}
+
 % other configurations
 \addbibresource{reference.bib}  % bib file location
 \graphicspath{{figs}}  % default path to search for figures
@@ -154,6 +158,8 @@ another fake citation \cite{author2_2000}.
             \caption{Mt. Otkliknoy Greben (public domain figure)}
         \end{figure}
         \lipsum[5]
+
+        % on the contrary to glossaries, nomenclatures have to be in the document environment
         \nomenclature{$c$}{Speed of light in a vacuum}
         \nomenclature{$\alpha$}{
             A very long definition.  A very long definition.  A very long definition.
@@ -167,6 +173,17 @@ another fake citation \cite{author2_2000}.
     \section{Appendix Can Have Sections}
     \lipsum[6]
 
+    Use \verb!\newglossaryentry! to define a glossary entry, and use \verb!\gls! to use it in the
+    content.
+    For example: \gls{ex}.
+
+    Also, use \verb!\newabbreviation! to define abbreviations, and use \verb!\gls! to automatically show
+    long and short expressions of this term based on the occurrence.
+    For example first use: \gls{svm}, and second use: \gls{svm}.
+
+    Terms in glossaries must be defined in the preamble.
+    See the user manual of package \verb!glossaries!.
+
 \chapter{
     The Heading of Appendix B
     The Heading of Appendix B
@@ -175,22 +192,22 @@ another fake citation \cite{author2_2000}.
     The Heading of Appendix B
     The Heading of Appendix B
 }
-\lipsum[7]
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{||c c c c||}
-         \hline
-         Col1 & Col2 & Col2 & Col3 \\ [0.5ex]
-         \hline\hline
-         1 & 6 & 87837 & 787 \\
-         2 & 7 & 78 & 5415 \\
-         3 & 545 & 778 & 7507 \\
-         4 & 545 & 18744 & 7560 \\
-         5 & 88 & 788 & 6344 \\ [1ex]
-         \hline
-    \end{tabular}
-    \caption{Example table 3}
-\end{table}
-\lipsum[1]
+    \lipsum[7]
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{||c c c c||}
+             \hline
+             Col1 & Col2 & Col2 & Col3 \\ [0.5ex]
+             \hline\hline
+             1 & 6 & 87837 & 787 \\
+             2 & 7 & 78 & 5415 \\
+             3 & 545 & 778 & 7507 \\
+             4 & 545 & 18744 & 7560 \\
+             5 & 88 & 788 & 6344 \\ [1ex]
+             \hline
+        \end{tabular}
+        \caption{Example table 3}
+    \end{table}
+    \lipsum[1]
 
 \end{document}

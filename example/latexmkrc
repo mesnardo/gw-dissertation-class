@@ -32,3 +32,17 @@ add_cus_dep("nlo", "nls", 0, "makelos");
 
 # let latexmk knows .nlo and .nls files have to be cleaned when it does cleaning
 push @generated_exts, "nlo", "nls";
+
+# a Perl function to generate a table for glossaries
+sub makeglossaries
+{
+    return system(
+        "makeglossaries -s $_[0].ist -t $_[0].glg -o $_[0].gls $_[0]"
+    );
+}
+
+# let latexmk knows it has to convert .glo files to .gls files
+add_cus_dep("glo", "gls", 0, "makeglossaries");
+
+# let latexmk knows .glo and .gls files have to be cleaned when it does cleaning
+push @generated_exts, "glo", "gls";
