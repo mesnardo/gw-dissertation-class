@@ -39,6 +39,8 @@
 \RequirePackage{etoolbox}  % provides some commands for defining robust macros
 \RequirePackage[T1]{fontenc}  % use 8bit encoded fonts
 \RequirePackage[no-math]{fontspec}  % allows us to use .ttf or .otf fonts
+\RequirePackage{amsmath}  % required to be loaded before unicode-math
+\RequirePackage{mathtools}  % required to be loaded before unicode-math
 \RequirePackage{unicode-math}  % allows using unicode for math symbols and ISO math standard
 \RequirePackage[dvipsnames]{xcolor}  % provides ways to colorize words (must before hyperref)
 \RequirePackage{hyperref}  % helps creating internal/external hyperlinks

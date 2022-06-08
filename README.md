@@ -104,6 +104,15 @@ names in the front matter:
    Just use the commands to define glossary terms and symbols directly.
 
 
+### Math font
+--------------
+
+Math font is handled by package `unicode-math`. Therefore, it is better to use `\symbf`, `\symit`,
+etc., rather than native commands (e.g., `\mathbf`, etc.). Also, `unicode-math` requires math
+typesetting packages to be loaded before loading it, so `amsmath` and `mathtools` are loaded
+already in the style definition file.
+
+
 ### Bibliography
 ----------------
 
