@@ -182,6 +182,7 @@
 \setlength{\RaggedRightParindent}{0.5in\relax}
 \AtBeginEnvironment{figure}{\setlength{\RaggedRightParindent}{0em}}
 \AtBeginEnvironment{table}{\setlength{\RaggedRightParindent}{0em}}
+\AtBeginEnvironment{longtable}{\setlength{\RaggedRightParindent}{0em}}
 
 % header and footer styles
 \pagestyle{fancy}  % use fancyhdr's fancy page style
