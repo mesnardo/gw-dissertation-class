@@ -255,6 +255,7 @@
 \captionsetup{font={footnotesize, stretch=\@factor@single}}
 \captionsetup{labelfont={bf}}
 \captionsetup{position=bottom}
+\captionsetup{width=0.85\textwidth}
 
 % =================================================================================================
 % private macros/functions/helpers
