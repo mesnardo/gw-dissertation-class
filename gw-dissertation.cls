@@ -241,7 +241,7 @@
 \unimathsetup{nabla=upright}
 \unimathsetup{partial=upright}
 \unimathsetup{warnings-off={mathtools-colon, mathtools-overbracket}}
-\setmathfont{texgyrepagella-math.otf}
+\setmathfont{STIXTwoMath-Regular.otf}
 
 % make sure the hyperlink IDs of chapters and parts are unique even when we restart the counter
 % (we restart the counter because appendicies)

@@ -36,6 +36,9 @@ options. Additionally, there two more class options:
      [ttf-ms-fonts](https://aur.archlinux.org/packages/ttf-ms-fonts)
    * Palatino is not open-source. It is only available in AUR packages, such as
      [ttf-win7-fonts](https://aur.archlinux.org/packages/ttf-win7-fonts).
+  
+  The font setting only affects the non-math mode. The math mode is hard-coded to use
+  [STIX](https://github.com/stipub/stixfonts).
 
 
 ## Usage
