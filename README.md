@@ -18,13 +18,16 @@ options. Additionally, there two more class options:
 
 2. **font**
   
-   Times New Roman is the designated font type by GW. However, we prefer Palatino over Times New
-   Roman. Palatino doesn't seem to be open-source nor free. So the class also allows URW P052 or
-   TeX Gyre Pagella, which are the open-source equivalents to Palatino. The default font is P052.'
-   To specify the font, use the package option `font`:
+   Times New Roman is the designated font type by GW. However, we prefer STIX 2 over Times New
+   Roman. So STIX 2 is the default font in this class. Also, STIX 2 is shipped in some modern TeX
+   distributions, for example, the `texlive` in Linux.
 
+   This class also allows Palatino, URW P052 or TeX Gyre Pagella. To specify the font, use the
+   package option `font`:
+
+   * STIX 2 (default): `\documentclass[font=STIX2]{gw-dissertation}[2021/11/19] `
    * Times New Roman: `\documentclass[font=Times]{gw-dissertation}[2021/11/19] `
-   * URW P052 (default): `\documentclass[font=P052]{gw-dissertation}[2021/11/19] `
+   * URW P052: `\documentclass[font=P052]{gw-dissertation}[2021/11/19] `
    * TeX Gyre Pagella: `\documentclass[font=Pagella]{gw-dissertation}[2021/11/19] `
    * Palatino: `\documentclass[font=Palatino]{gw-dissertation}[2021/11/19] `
   
@@ -38,7 +41,7 @@ options. Additionally, there two more class options:
      [ttf-win7-fonts](https://aur.archlinux.org/packages/ttf-win7-fonts).
   
   The font setting only affects the non-math mode. The math mode is hard-coded to use
-  [STIX](https://github.com/stipub/stixfonts).
+  [STIX2](https://github.com/stipub/stixfonts).
 
 
 ## Usage

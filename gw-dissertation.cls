@@ -19,7 +19,7 @@
 % class options
 % =================================================================================================
 \SetupKeyvalOptions{family=@classopts, prefix=@classopts@}
-\DeclareStringOption[P052]{font}[P052]
+\DeclareStringOption[STIX2]{font}[STIX2]
 \DeclareBoolOption[false]{debug}
 \ProcessKeyvalOptions{@classopts}
 
@@ -211,6 +211,7 @@
 \patchcmd{\Hy@org@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{}
 
 % allowed fonts
+\listadd{\@allowedfonts}{STIX2}
 \listadd{\@allowedfonts}{P052}
 \listadd{\@allowedfonts}{Pagella}
 \listadd{\@allowedfonts}{Palatino}
@@ -218,6 +219,14 @@
 
 % main font configurations
 \xifinlist{\@classopts@font}{\@allowedfonts}{%
+    \expandafter\ifstrequal\expandafter{\@classopts@font}{STIX2}{%
+        \setmainfont{STIXTwoText-Regular}[
+            Extension = .otf,
+            BoldFont = STIXTwoText-Bold,
+            ItalicFont = STIXTwoText-Italic,
+            BoldItalicFont = STIXTwoText-BoldItalic,
+        ]
+    }{}%
     \expandafter\ifstrequal\expandafter{\@classopts@font}{P052}{\setmainfont{P052}}{}%
     \expandafter\ifstrequal\expandafter{\@classopts@font}{Pagella}{\setmainfont{Pagella}}{}%
     \expandafter\ifstrequal\expandafter{\@classopts@font}{Palatino}{\setmainfont{Palatino Linotype}}{}%
