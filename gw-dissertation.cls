@@ -47,7 +47,7 @@
 \RequirePackage{arrayjobx}  % provides arrays for holding information of committee members
 \RequirePackage{multido}  %  provides a for-loop like command (multido)
 \RequirePackage[titles]{tocloft}  % fine tunes loc, lof, and lot
-\RequirePackage{enumitem}  % fine tunes enumeration/lists
+\RequirePackage[inline]{enumitem}  % fine tunes enumeration/lists
 \RequirePackage{nomencl}  % to have a list of symbols
 \RequirePackage{indentfirst}  % as its name
 \RequirePackage{xparse}  % LaTeX 3 style to define functions
