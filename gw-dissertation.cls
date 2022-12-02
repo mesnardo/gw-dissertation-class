@@ -435,7 +435,13 @@
     \newpage%
     \@addanchor{chapter}{Abstract of Dissertation}%
     \chapter*{Abstract of Dissertation}
-    {\centering\textbf{\@title}\\}%
+    \begingroup
+        \singlespacing
+        \vspace{\baselineskip}
+        \centering
+        \textbf{\@title}
+        \par
+    \endgroup
     \@abstract%
 }
 
